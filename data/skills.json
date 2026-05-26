@@ -1,0 +1,278 @@
+{
+  "Appraise": {
+    "keyAbility": "int",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Balance": {
+    "keyAbility": "dex",
+    "trainedOnly": false,
+    "armorCheckPenalty": true,
+    "hasSpecialization": false
+  },
+  "Bluff": {
+    "keyAbility": "cha",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Climb": {
+    "keyAbility": "str",
+    "trainedOnly": false,
+    "armorCheckPenalty": true,
+    "hasSpecialization": false
+  },
+  "Concentration": {
+    "keyAbility": "con",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Craft": {
+    "keyAbility": "int",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": true
+  },
+  "Decipher Script": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Diplomacy": {
+    "keyAbility": "cha",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Disable Device": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Disguise": {
+    "keyAbility": "cha",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Escape Artist": {
+    "keyAbility": "dex",
+    "trainedOnly": false,
+    "armorCheckPenalty": true,
+    "hasSpecialization": false
+  },
+  "Forgery": {
+    "keyAbility": "int",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Gather Information": {
+    "keyAbility": "cha",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Handle Animal": {
+    "keyAbility": "cha",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Heal": {
+    "keyAbility": "wis",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Hide": {
+    "keyAbility": "dex",
+    "trainedOnly": false,
+    "armorCheckPenalty": true,
+    "hasSpecialization": false
+  },
+  "Intimidate": {
+    "keyAbility": "cha",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Jump": {
+    "keyAbility": "str",
+    "trainedOnly": false,
+    "armorCheckPenalty": true,
+    "hasSpecialization": false
+  },
+  "Knowledge (Arcana)": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Knowledge (Architecture and Engineering)": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Knowledge (Dungeoneering)": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Knowledge (Geography)": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Knowledge (History)": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Knowledge (Local)": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Knowledge (Nature)": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Knowledge (Nobility and Royalty)": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Knowledge (Religion)": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Knowledge (The planes)": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Listen": {
+    "keyAbility": "wis",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Literacy": {
+    "keyAbility": null,
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Move Silently": {
+    "keyAbility": "dex",
+    "trainedOnly": false,
+    "armorCheckPenalty": true,
+    "hasSpecialization": false
+  },
+  "Open Lock": {
+    "keyAbility": "dex",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Perform": {
+    "keyAbility": "cha",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": true
+  },
+  "Profession": {
+    "keyAbility": "wis",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": true
+  },
+  "Ride": {
+    "keyAbility": "dex",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Search": {
+    "keyAbility": "int",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Sense Motive": {
+    "keyAbility": "wis",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Sleight Of Hand": {
+    "keyAbility": "dex",
+    "trainedOnly": true,
+    "armorCheckPenalty": true,
+    "hasSpecialization": false
+  },
+  "Speak Language": {
+    "keyAbility": null,
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": true
+  },
+  "Spellcraft": {
+    "keyAbility": "int",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Spot": {
+    "keyAbility": "wis",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Survival": {
+    "keyAbility": "wis",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Swim": {
+    "keyAbility": "str",
+    "trainedOnly": false,
+    "armorCheckPenalty": true,
+    "hasSpecialization": false
+  },
+  "Tumble": {
+    "keyAbility": "dex",
+    "trainedOnly": true,
+    "armorCheckPenalty": true,
+    "hasSpecialization": false
+  },
+  "Use Magic Device": {
+    "keyAbility": "cha",
+    "trainedOnly": true,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  },
+  "Use Rope": {
+    "keyAbility": "dex",
+    "trainedOnly": false,
+    "armorCheckPenalty": false,
+    "hasSpecialization": false
+  }
+}

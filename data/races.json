@@ -1,0 +1,460 @@
+{
+  "Human": {
+    "name": "Human",
+    "size": "Medium",
+    "speed": 30,
+    "abilityModifiers": {
+      "str": 0,
+      "dex": 0,
+      "con": 0,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "features": [
+      {
+        "name": "Bonus Feat",
+        "description": "One extra feat at 1st level.",
+        "abilityType": "",
+        "showOnSheet": true,
+        "showOnBlock": false,
+        "isSpecialAttack": false,
+        "isSpecialQuality": false
+      },
+      {
+        "name": "Extra Skill Points",
+        "description": "4 extra skill points at 1st level, 1 extra skill point at each additional level.",
+        "abilityType": "",
+        "showOnSheet": true,
+        "showOnBlock": false,
+        "isSpecialAttack": false,
+        "isSpecialQuality": false
+      }
+    ],
+    "isMonster": false
+  },
+  "Gnome": {
+    "name": "Gnome",
+    "size": "Small",
+    "speed": 20,
+    "abilityModifiers": {
+      "str": -2,
+      "dex": 0,
+      "con": 2,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "features": [
+      {
+        "name": "Gnome Weapon Familiarity",
+        "description": "Treat gnome hooked hammers as martial weapons.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Low-Light Vision",
+        "description": "See twice as far as a human in dim light.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Gnomish Illusion Affinity",
+        "description": "+1 to saving throw DCs for illusion spells.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Gnomish Rancor",
+        "description": "+1 racial bonus on attack rolls against kobolds and goblinoids.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Gnomish Giantfighting",
+        "description": "+4 dodge bonus to AC against giants.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Gnomish Skills",
+        "description": "+2 racial bonus on Craft (alchemy) and Listen checks.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Gnomish Spell-Like Abilities",
+        "description": "1/day—speak with animals, dancing lights, ghost sound, prestidigitation (Min Cha 10).",
+        "abilityType": "Sp",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      }
+    ],
+    "isMonster": false
+  },
+  "Ogre": {
+    "name": "Ogre",
+    "size": "Large",
+    "speed": 40,
+    "abilityModifiers": {
+      "str": 10,
+      "dex": -2,
+      "con": 4,
+      "int": -4,
+      "wis": -4,
+      "cha": -4
+    },
+    "naturalArmor": 5,
+    "isMonster": true,
+    "monsterProgression": [
+      "Giant",
+      "Giant",
+      "Giant",
+      "Giant",
+      "Level Adjustment",
+      "Level Adjustment"
+    ],
+    "classSkills": [
+      "Climb",
+      "Listen",
+      "Spot"
+    ],
+    "features": [
+      {
+        "name": "Darkvision",
+        "description": "See up to 60 feet in total darkness.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Low-Light Vision",
+        "description": "See twice as far as a human in dim light.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      }
+    ],
+    "type": "Giant"
+  },
+  "Dwarf": {
+    "name": "Dwarf",
+    "size": "Medium",
+    "speed": 20,
+    "abilityModifiers": {
+      "str": 0,
+      "dex": 0,
+      "con": 2,
+      "int": 0,
+      "wis": 0,
+      "cha": -2
+    },
+    "features": [
+      {
+        "name": "Darkvision",
+        "description": "See up to 60 feet in total darkness.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Stonecunning",
+        "description": "+2 racial bonus on Search checks to notice unusual stonework.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Dwarven Weapon Familiarity",
+        "description": "Treat dwarven waraxes and dwarven urgroashes as martial weapons.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Stability",
+        "description": "+4 bonus on stability checks to resist bull rush or trip.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Dwarven Poison Resistance",
+        "description": "+2 racial bonus on saving throws against poison.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Dwarven Spell Resistance",
+        "description": "+2 racial bonus on saving throws against spells.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Dwarven Rancor",
+        "description": "+1 racial bonus on attack rolls against orcs and goblinoids.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Dwarven Giantfighting",
+        "description": "+4 dodge bonus to AC against giants.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Dwarven Skills",
+        "description": "+2 racial bonus on Appraise and Craft checks related to stone or metal.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      }
+    ],
+    "isMonster": false
+  },
+  "Elf": {
+    "name": "Elf",
+    "size": "Medium",
+    "speed": 30,
+    "abilityModifiers": {
+      "str": 0,
+      "dex": 2,
+      "con": -2,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "features": [
+      {
+        "name": "Elven Sleep Immunity",
+        "description": "Immune to magic sleep effects, +2 saving throw bonus against enchantment spells.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Low-Light Vision",
+        "description": "See twice as far as a human in dim light.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Elven Weapon Proficiency",
+        "description": "Proficient with longsword, rapier, longbow, and shortbow.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Elven Senses",
+        "description": "+2 racial bonus on Listen, Search, and Spot checks. Automatic Search if within 5 feet of secret door.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      }
+    ],
+    "isMonster": false
+  },
+  "Half-Elf": {
+    "name": "Half-Elf",
+    "size": "Medium",
+    "speed": 30,
+    "abilityModifiers": {
+      "str": 0,
+      "dex": 0,
+      "con": 0,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "features": [
+      {
+        "name": "Elven Sleep Immunity",
+        "description": "Immune to magic sleep effects, +2 saving throw bonus against enchantment spells.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Low-Light Vision",
+        "description": "See twice as far as a human in dim light.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Half-Elven Senses",
+        "description": "+1 racial bonus on Listen, Search, and Spot checks.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Half-Elven Skills",
+        "description": "+2 racial bonus on Diplomacy and Gather Information checks.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Elven Blood",
+        "description": "Treated as an elf for all racial effects.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      }
+    ],
+    "isMonster": false
+  },
+  "Half-Orc": {
+    "name": "Half-Orc",
+    "size": "Medium",
+    "speed": 30,
+    "abilityModifiers": {
+      "str": 2,
+      "dex": 0,
+      "con": 0,
+      "int": -2,
+      "wis": 0,
+      "cha": -2
+    },
+    "features": [
+      {
+        "name": "Darkvision",
+        "description": "See up to 60 feet in total darkness.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Orc Blood",
+        "description": "Treated as an orc for all racial effects.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      }
+    ],
+    "isMonster": false
+  },
+  "Halfling": {
+    "name": "Halfling",
+    "size": "Small",
+    "speed": 20,
+    "abilityModifiers": {
+      "str": -2,
+      "dex": 2,
+      "con": 0,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "features": [
+      {
+        "name": "Halfling Skills",
+        "description": "+2 racial bonus on Climb, Jump, Listen, and Move Silently checks.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Halfling Luck",
+        "description": "+1 racial bonus on all saving throws.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Halfling Fearlessness",
+        "description": "+2 morale bonus on saving throws against fear.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      },
+      {
+        "name": "Halfling Thrown Weapon Mastery",
+        "description": "+1 racial bonus on attack rolls with thrown weapons and slings.",
+        "abilityType": "Ex",
+        "showOnSheet": true,
+        "showOnBlock": true,
+        "isSpecialAttack": false,
+        "isSpecialQuality": true
+      }
+    ],
+    "isMonster": false
+  }
+}

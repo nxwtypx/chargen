@@ -1,0 +1,2353 @@
+{
+  "Barbarian": {
+    "name": "Barbarian",
+    "source": "SRD",
+    "hitDie": 12,
+    "babProgression": "good",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "good"
+    },
+    "skillPoints": 4,
+    "classSkills": [
+      "Climb",
+      "Craft",
+      "Handle Animal",
+      "Intimidate",
+      "Jump",
+      "Listen",
+      "Ride",
+      "Survival",
+      "Swim"
+    ],
+    "features": {
+      "1": [
+        {
+          "name": "Fast movement",
+          "description": "+10 feet to base land speed.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Illiteracy",
+          "description": "Barbarians are illiterate unless they spend two skill points or take a level in a literate class.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": false,
+          "isSpecialAttack": false,
+          "isSpecialQuality": false
+        },
+        {
+          "name": "Rage 1/day",
+          "description": "1/day, +4 Con, +4 Str, +2 Will saves, -2 AC. Fatigued after 3+Constitution Modifier rounds.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ],
+      "2": [
+        {
+          "name": "Uncanny dodge",
+          "description": "Retain Dexterity bonus to AC even if caught flat-footed.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "3": [
+        {
+          "name": "Trap sense +1",
+          "description": "+1 bonus on Reflex saves and AC against traps.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "4": [
+        {
+          "name": "Rage 2/day",
+          "description": "2/day, +4 Con, +4 Str, +2 Will saves, -2 AC. Fatigued after 3+Constitution Modifier rounds.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false,
+          "replaces": "rage 1/day"
+        }
+      ],
+      "5": [
+        {
+          "name": "Improved uncanny dodge",
+          "description": "Cannot be flanked; sneak attacks only from rogues 4+ levels higher.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Uncanny dodge"
+        }
+      ],
+      "6": [
+        {
+          "name": "Trap sense +2",
+          "description": "+2 bonus on Reflex saves and AC against traps.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Trap sense +1"
+        }
+      ],
+      "7": [
+        {
+          "name": "Damage reduction 1/—",
+          "description": "Subtract 1 point of damage from any melee or ranged attack.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "8": [
+        {
+          "name": "Rage 3/day",
+          "description": "3/day, +4 Con, +4 Str, +2 Will saves, -2 AC. Fatigued after 3+Constitution Modifier rounds.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false,
+          "replaces": "Rage 2/day"
+        }
+      ],
+      "9": [
+        {
+          "name": "Trap sense +3",
+          "description": "+3 bonus on Reflex saves and AC against traps.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Trap sense +2"
+        }
+      ],
+      "10": [
+        {
+          "name": "Damage reduction 2/—",
+          "description": "Subtract 2 points of damage from any melee or ranged attack.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Damage reduction 1/—"
+        }
+      ],
+      "11": [
+        {
+          "name": "Greater rage",
+          "description": "Rage bonuses increase to +6 Str, +6 Con, +3 Will saves.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false,
+          "replaces": "Rage 3/day"
+        }
+      ],
+      "12": [
+        {
+          "name": "Rage 4/day",
+          "description": "4/day, +6 Con, +6 Str, +3 Will saves, -2 AC. Greater rage.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false,
+          "replaces": "Greater rage"
+        },
+        {
+          "name": "Trap sense +4",
+          "description": "+4 bonus on Reflex saves and AC against traps.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Trap sense +3"
+        }
+      ],
+      "13": [
+        {
+          "name": "Damage reduction 3/—",
+          "description": "Subtract 3 points of damage from any melee or ranged attack.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Damage reduction 2/—"
+        }
+      ],
+      "14": [
+        {
+          "name": "Indomitable will",
+          "description": "+4 bonus on Will saves against enchantments while raging.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "15": [
+        {
+          "name": "Trap sense +5",
+          "description": "+5 bonus on Reflex saves and AC against traps.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Trap sense +4"
+        }
+      ],
+      "16": [
+        {
+          "name": "Damage reduction 4/—",
+          "description": "Subtract 4 points of damage from any melee or ranged attack.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Damage reduction 3/—"
+        },
+        {
+          "name": "Rage 5/day",
+          "description": "5/day, +6 Con, +6 Str, +3 Will saves, -2 AC. Greater rage.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false,
+          "replaces": "Rage 4/day"
+        }
+      ],
+      "17": [
+        {
+          "name": "Tireless rage",
+          "description": "No longer fatigued after rage ends.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "18": [
+        {
+          "name": "Trap sense +6",
+          "description": "+6 bonus on Reflex saves and AC against traps.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Trap sense +5"
+        }
+      ],
+      "19": [
+        {
+          "name": "Damage reduction 5/—",
+          "description": "Subtract 5 points of damage from any melee or ranged attack.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Damage reduction 4/—"
+        }
+      ],
+      "20": [
+        {
+          "name": "Mighty rage",
+          "description": "Rage bonuses increase to +8 Str, +8 Con, +4 Will saves.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false,
+          "replaces": "Rage 5/day"
+        },
+        {
+          "name": "Rage 6/day",
+          "description": "6/day, +8 Con, +8 Str, +4 Will saves, -2 AC. Mighty rage.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false,
+          "replaces": "Mighty rage"
+        }
+      ]
+    },
+    "startingGold": 160
+  },
+  "Bard": {
+    "name": "Bard",
+    "source": "SRD",
+    "hitDie": 6,
+    "babProgression": "average",
+    "saves": {
+      "fort": "poor",
+      "ref": "good",
+      "will": "good"
+    },
+    "skillPoints": 6,
+    "classSkills": [
+      "Appraise",
+      "Balance",
+      "Bluff",
+      "Climb",
+      "Concentration",
+      "Craft",
+      "Decipher Script",
+      "Diplomacy",
+      "Disguise",
+      "Escape Artist",
+      "Gather Information",
+      "Hide",
+      "Jump",
+      "Knowledge (Arcana)",
+      "Knowledge (Architecture and Engineering)",
+      "Knowledge (Dungeoneering)",
+      "Knowledge (Geography)",
+      "Knowledge (History)",
+      "Knowledge (Local)",
+      "Knowledge (Nature)",
+      "Knowledge (Nobility and Royalty )",
+      "Knowledge (Religion)",
+      "Knowledge (The planes)",
+      "Listen",
+      "Move Silently",
+      "Perform",
+      "Profession",
+      "Sense Motive",
+      "Sleight Of Hand",
+      "Speak Language",
+      "Spellcraft",
+      "Swim",
+      "Tumble",
+      "Use Magic Device"
+    ],
+    "castingType": "spontaneous",
+    "spellSlotStat": "cha",
+    "spellSaveDCStat": "cha",
+    "features": {
+      "1": [
+        {
+          "name": "Bardic music",
+          "description": "Use song or poetics to produce magical effects.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Bardic knowledge",
+          "description": "Add level + Int modifier to bardic knowledge checks.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Countersong",
+          "description": "Counter magical effects that depend on sound.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Fascinate",
+          "description": "Fascinate a creature with music or poetics.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Inspire courage +1",
+          "description": "+1 morale bonus against charm/fear, +1 attack/damage.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "3": [
+        {
+          "name": "Inspire competence",
+          "description": "+2 competence bonus on skill checks for an ally.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "6": [
+        {
+          "name": "Suggestion",
+          "description": "Make a suggestion to a fascinated creature.",
+          "abilityType": "Sp",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "8": [
+        {
+          "name": "Inspire courage +2",
+          "description": "+2 morale bonus against charm/fear, +2 attack/damage.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Inspire courage +1"
+        }
+      ],
+      "9": [
+        {
+          "name": "Inspire greatness",
+          "description": "Grant bonus hit dice, +2 attack, +1 Fort save.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "12": [
+        {
+          "name": "Song of freedom",
+          "description": "Create a break enchantment effect with 1 minute of song.",
+          "abilityType": "Sp",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "14": [
+        {
+          "name": "Inspire courage +3",
+          "description": "+3 morale bonus against charm/fear, +3 attack/damage.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Inspire courage +2"
+        }
+      ],
+      "15": [
+        {
+          "name": "Inspire heroics",
+          "description": "+4 morale bonus on saves and dodge bonus to AC.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "18": [
+        {
+          "name": "Mass suggestion",
+          "description": "Make a suggestion to any number of fascinated creatures.",
+          "abilityType": "Sp",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Suggestion"
+        }
+      ],
+      "20": [
+        {
+          "name": "Inspire courage +4",
+          "description": "+4 morale bonus against charm/fear, +4 attack/damage.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Inspire courage +3"
+        }
+      ]
+    },
+    "spellSlots": {
+      "1": [
+        2
+      ],
+      "2": [
+        3,
+        0
+      ],
+      "3": [
+        3,
+        1
+      ],
+      "4": [
+        3,
+        2,
+        0
+      ],
+      "5": [
+        3,
+        3,
+        1
+      ],
+      "6": [
+        3,
+        3,
+        2
+      ],
+      "7": [
+        3,
+        3,
+        2,
+        0
+      ],
+      "8": [
+        3,
+        3,
+        3,
+        1
+      ],
+      "9": [
+        3,
+        3,
+        3,
+        2
+      ],
+      "10": [
+        3,
+        3,
+        3,
+        2,
+        0
+      ],
+      "11": [
+        3,
+        3,
+        3,
+        3,
+        1
+      ],
+      "12": [
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "13": [
+        3,
+        3,
+        3,
+        3,
+        2,
+        0
+      ],
+      "14": [
+        4,
+        3,
+        3,
+        3,
+        3,
+        1
+      ],
+      "15": [
+        4,
+        4,
+        3,
+        3,
+        3,
+        2
+      ],
+      "16": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        2,
+        0
+      ],
+      "17": [
+        4,
+        4,
+        4,
+        4,
+        3,
+        3,
+        1
+      ],
+      "18": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        3,
+        2
+      ],
+      "19": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        3
+      ],
+      "20": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "spellsKnown": {
+      "1": [
+        4
+      ],
+      "2": [
+        5,
+        2
+      ],
+      "3": [
+        6,
+        3
+      ],
+      "4": [
+        6,
+        3,
+        2
+      ],
+      "5": [
+        6,
+        4,
+        3
+      ],
+      "6": [
+        6,
+        4,
+        3
+      ],
+      "7": [
+        6,
+        4,
+        4,
+        2
+      ],
+      "8": [
+        6,
+        4,
+        4,
+        3
+      ],
+      "9": [
+        6,
+        4,
+        4,
+        3
+      ],
+      "10": [
+        6,
+        4,
+        4,
+        4,
+        2
+      ],
+      "11": [
+        6,
+        4,
+        4,
+        4,
+        3
+      ],
+      "12": [
+        6,
+        4,
+        4,
+        4,
+        3
+      ],
+      "13": [
+        6,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "14": [
+        6,
+        4,
+        4,
+        4,
+        4,
+        3
+      ],
+      "15": [
+        6,
+        4,
+        4,
+        4,
+        4,
+        3
+      ],
+      "16": [
+        6,
+        5,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "17": [
+        6,
+        5,
+        5,
+        4,
+        4,
+        4,
+        3
+      ],
+      "18": [
+        6,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3
+      ],
+      "19": [
+        6,
+        5,
+        5,
+        5,
+        5,
+        4,
+        4
+      ],
+      "20": [
+        6,
+        5,
+        5,
+        5,
+        5,
+        5,
+        4
+      ]
+    },
+    "startingGold": 160
+  },
+  "Cleric": {
+    "name": "Cleric",
+    "source": "SRD",
+    "hitDie": 8,
+    "babProgression": "average",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "good"
+    },
+    "skillPoints": 2,
+    "classSkills": [
+      "Concentration",
+      "Craft",
+      "Diplomacy",
+      "Heal",
+      "Knowledge (arcana)",
+      "Knowledge (history)",
+      "Knowledge (religion)",
+      "Knowledge (the planes)",
+      "Profession",
+      "Spellcraft"
+    ],
+    "spellSlotStat": "wis",
+    "spellSaveDCStat": "wis",
+    "hasDomainSlots": true,
+    "features": {
+      "1": [
+        {
+          "name": "Aura",
+          "description": "A cleric of a chaotic, evil, good, or lawful deity has a particularly powerful aura corresponding to the deity's alignment.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ]
+    },
+    "spellSlots": {
+      "1": [
+        3,
+        1
+      ],
+      "2": [
+        4,
+        2
+      ],
+      "3": [
+        4,
+        2,
+        1
+      ],
+      "4": [
+        5,
+        3,
+        2
+      ],
+      "5": [
+        5,
+        3,
+        2,
+        1
+      ],
+      "6": [
+        5,
+        3,
+        3,
+        2
+      ],
+      "7": [
+        6,
+        4,
+        3,
+        2,
+        1
+      ],
+      "8": [
+        6,
+        4,
+        3,
+        3,
+        2
+      ],
+      "9": [
+        6,
+        4,
+        4,
+        3,
+        2,
+        1
+      ],
+      "10": [
+        6,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "11": [
+        6,
+        5,
+        4,
+        4,
+        3,
+        2,
+        1
+      ],
+      "12": [
+        6,
+        5,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "13": [
+        6,
+        5,
+        5,
+        4,
+        4,
+        3,
+        2,
+        1
+      ],
+      "14": [
+        6,
+        5,
+        5,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "15": [
+        6,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3,
+        2,
+        1
+      ],
+      "16": [
+        6,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "17": [
+        6,
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3,
+        2,
+        1
+      ],
+      "18": [
+        6,
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "19": [
+        6,
+        5,
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3,
+        3
+      ],
+      "20": [
+        6,
+        5,
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        4,
+        4
+      ]
+    }
+  },
+  "Druid": {
+    "name": "Druid",
+    "source": "SRD",
+    "hitDie": 8,
+    "babProgression": "average",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "good"
+    },
+    "skillPoints": 4,
+    "classSkills": [
+      "Concentration",
+      "Craft",
+      "Diplomacy",
+      "Handle Animal",
+      "Heal",
+      "Knowledge (nature)",
+      "Listen",
+      "Profession",
+      "Ride",
+      "Spellcraft",
+      "Spot",
+      "Survival",
+      "Swim"
+    ],
+    "spellSlotStat": "wis",
+    "spellSaveDCStat": "wis",
+    "features": {
+      "1": [
+        {
+          "name": "Animal companion",
+          "description": "A druid may begin play with an animal companion. (Stub)",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Nature sense",
+          "description": "A druid gains a +2 bonus on Knowledge (nature) and Survival checks.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Wild empathy",
+          "description": "A druid can improve the attitude of an animal.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "2": [
+        {
+          "name": "Woodland stride",
+          "description": "A druid may move through any sort of undergrowth at her normal speed and without taking damage or suffering any other impairment.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "3": [
+        {
+          "name": "Trackless step",
+          "description": "A druid leaves no trail in natural surroundings and cannot be tracked.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "4": [
+        {
+          "name": "Resist nature's lure",
+          "description": "A druid gains a +4 bonus on saving throws against the spell-like abilities of fey.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "5": [
+        {
+          "name": "Wild shape (1/day)",
+          "description": "A druid gains the ability to turn herself into any Small or Medium animal and back again once per day.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "6": [
+        {
+          "name": "Wild shape (2/day)",
+          "description": "Wild shape 2/day.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (1/day)"
+        }
+      ],
+      "7": [
+        {
+          "name": "Wild shape (3/day)",
+          "description": "Wild shape 3/day.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (2/day)"
+        }
+      ],
+      "8": [
+        {
+          "name": "Wild shape (Large)",
+          "description": "Wild shape 3/day, Large.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (3/day)"
+        }
+      ],
+      "9": [
+        {
+          "name": "Venom immunity",
+          "description": "A druid gains immunity to all poisons.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "10": [
+        {
+          "name": "Wild shape (4/day)",
+          "description": "Wild shape 4/day, Large.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (Large)"
+        }
+      ],
+      "11": [
+        {
+          "name": "Wild shape (Tiny)",
+          "description": "Wild shape 4/day, Large, Tiny.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (4/day)"
+        }
+      ],
+      "12": [
+        {
+          "name": "Wild shape (plant)",
+          "description": "Wild shape 4/day, Large, Tiny, Plant.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (Tiny)"
+        }
+      ],
+      "13": [
+        {
+          "name": "A thousand faces",
+          "description": "A druid gains the ability to change her appearance at will, as if using the disguise self spell.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "14": [
+        {
+          "name": "Wild shape (5/day)",
+          "description": "Wild shape 5/day, Large, Tiny, Plant.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (plant)"
+        }
+      ],
+      "15": [
+        {
+          "name": "Timeless body",
+          "description": "A druid no longer takes ability score penalties for aging and cannot be magically aged.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Wild shape (Huge)",
+          "description": "Wild shape 5/day, Huge, Large, Tiny, Plant.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (5/day)"
+        }
+      ],
+      "16": [
+        {
+          "name": "Wild shape (elemental 1/day)",
+          "description": "Wild shape 5/day, Huge, Large, Tiny, Plant, Elemental 1/day.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (Huge)"
+        }
+      ],
+      "18": [
+        {
+          "name": "Wild shape (6/day)",
+          "description": "Wild shape 6/day, Huge, Large, Tiny, Plant, Elemental 2/day.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (elemental 1/day)"
+        }
+      ],
+      "20": [
+        {
+          "name": "Wild shape (elemental 3/day, Huge elemental)",
+          "description": "Wild shape 6/day, Huge, Large, Tiny, Plant, Elemental 3/day (Huge).",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Wild shape (6/day)"
+        }
+      ]
+    },
+    "spellSlots": {
+      "1": [
+        3,
+        1
+      ],
+      "2": [
+        4,
+        2
+      ],
+      "3": [
+        4,
+        2,
+        1
+      ],
+      "4": [
+        5,
+        3,
+        2
+      ],
+      "5": [
+        5,
+        3,
+        2,
+        1
+      ],
+      "6": [
+        5,
+        3,
+        3,
+        2
+      ],
+      "7": [
+        6,
+        4,
+        3,
+        2,
+        1
+      ],
+      "8": [
+        6,
+        4,
+        3,
+        3,
+        2
+      ],
+      "9": [
+        6,
+        4,
+        4,
+        3,
+        2,
+        1
+      ],
+      "10": [
+        6,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "11": [
+        6,
+        5,
+        4,
+        4,
+        3,
+        2,
+        1
+      ],
+      "12": [
+        6,
+        5,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "13": [
+        6,
+        5,
+        5,
+        4,
+        4,
+        3,
+        2,
+        1
+      ],
+      "14": [
+        6,
+        5,
+        5,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "15": [
+        6,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3,
+        2,
+        1
+      ],
+      "16": [
+        6,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "17": [
+        6,
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3,
+        2,
+        1
+      ],
+      "18": [
+        6,
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "19": [
+        6,
+        5,
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        3,
+        3
+      ],
+      "20": [
+        6,
+        5,
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        4,
+        4
+      ]
+    }
+  },
+  "Fighter": {
+    "name": "Fighter",
+    "source": "SRD",
+    "hitDie": 10,
+    "babProgression": "good",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "poor"
+    },
+    "skillPoints": 2,
+    "classSkills": [
+      "Climb",
+      "Craft",
+      "Handle Animal",
+      "Intimidate",
+      "Jump",
+      "Ride",
+      "Swim"
+    ],
+    "startingGold": 240,
+    "bonusFeats": {
+      "fighterBonusFeat": [
+        1,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16,
+        18,
+        20
+      ]
+    }
+  },
+  "Giant": {
+    "name": "Giant",
+    "hitDie": 8,
+    "babProgression": "average",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "poor"
+    },
+    "skillPoints": 2,
+    "classSkills": [],
+    "isMonsterClass": true
+  },
+  "Healer": {
+    "name": "Healer",
+    "source": "Miniatures Handbook",
+    "hitDie": 8,
+    "babProgression": "average",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "good"
+    },
+    "skillPoints": 4,
+    "classSkills": [
+      "Concentration",
+      "Craft",
+      "Diplomacy",
+      "Heal",
+      "Knowledge (Nature)",
+      "Knowledge (Religion)",
+      "Profession",
+      "Sense Motive",
+      "Spellcraft",
+      "Survival"
+    ],
+    "spellSlotStat": "wis",
+    "spellSaveDCStat": "cha",
+    "features": {
+      "1": [
+        {
+          "name": "Healing Hands",
+          "description": "Add Charisma modifier to all curative healing spells.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "3": [
+        {
+          "name": "Cleanse paralysis",
+          "description": "1/day, remove paralysis from a creature with a touch.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ],
+      "4": [
+        {
+          "name": "Cleanse disease",
+          "description": "1/day, remove disease from a creature with a touch.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ],
+      "5": [
+        {
+          "name": "Cleanse fear",
+          "description": "1/day, remove fear from a creature with a touch.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ],
+      "6": [
+        {
+          "name": "Cleanse poison",
+          "description": "1/day, neutralize poison from a creature with a touch.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ],
+      "7": [
+        {
+          "name": "Effortless healing",
+          "description": "Cast conjuration (healing) spells without provoking attacks of opportunity.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "8": [
+        {
+          "name": "Unicorn companion",
+          "description": "Gain a loyal unicorn companion.",
+          "abilityType": "Sp",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "9": [
+        {
+          "name": "Cleanse blindness",
+          "description": "1/day, cure blindness or deafness in a creature with a touch.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ],
+      "10": [
+        {
+          "name": "Cleanse spirit",
+          "description": "1/day, restore ability points or remove negative levels with a touch.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ],
+      "13": [
+        {
+          "name": "Cleanse petrification",
+          "description": "1/day, cure petrification with a touch.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ],
+      "15": [
+        {
+          "name": "New limb",
+          "description": "1/day, regrow a lost limb on a creature with a touch.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ],
+      "20": [
+        {
+          "name": "New life",
+          "description": "1/day, resurrect a deceased creature with a touch.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ]
+    },
+    "spellSlots": {
+      "1": [
+        4,
+        3
+      ],
+      "2": [
+        4,
+        4
+      ],
+      "3": [
+        5,
+        4,
+        3
+      ],
+      "4": [
+        5,
+        4,
+        4
+      ],
+      "5": [
+        5,
+        5,
+        4,
+        3
+      ],
+      "6": [
+        5,
+        5,
+        4,
+        4
+      ],
+      "7": [
+        6,
+        5,
+        5,
+        4,
+        3
+      ],
+      "8": [
+        6,
+        5,
+        5,
+        4,
+        4
+      ],
+      "9": [
+        6,
+        6,
+        5,
+        5,
+        4,
+        3
+      ],
+      "10": [
+        6,
+        6,
+        5,
+        5,
+        4,
+        4
+      ],
+      "11": [
+        6,
+        6,
+        6,
+        5,
+        5,
+        4,
+        3
+      ],
+      "12": [
+        6,
+        6,
+        6,
+        5,
+        5,
+        4,
+        4
+      ],
+      "13": [
+        6,
+        6,
+        6,
+        6,
+        5,
+        5,
+        4,
+        3
+      ],
+      "14": [
+        6,
+        6,
+        6,
+        6,
+        5,
+        5,
+        4,
+        4
+      ],
+      "15": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        5,
+        5,
+        4,
+        3
+      ],
+      "16": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        5,
+        5,
+        4,
+        4
+      ],
+      "17": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        5,
+        5,
+        4,
+        3
+      ],
+      "18": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        5,
+        5,
+        4,
+        4
+      ],
+      "19": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        5,
+        5,
+        4
+      ],
+      "20": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        5,
+        5,
+        4
+      ]
+    },
+    "startingGold": 80,
+    "bonusFeats": {
+      "Skill Focus (Heal)": [
+        2
+      ]
+    }
+  },
+  "Level Adjustment": {
+    "name": "Level Adjustment",
+    "hitDie": 0,
+    "babProgression": "poor",
+    "saves": {
+      "fort": "poor",
+      "ref": "poor",
+      "will": "poor"
+    },
+    "skillPoints": 0,
+    "classSkills": [],
+    "isMonsterClass": true
+  },
+  "Monk": {
+    "name": "Monk",
+    "source": "SRD",
+    "hitDie": 8,
+    "babProgression": "average",
+    "saves": {
+      "fort": "good",
+      "ref": "good",
+      "will": "good"
+    },
+    "skillPoints": 4,
+    "classSkills": [
+      "Balance",
+      "Climb",
+      "Concentration",
+      "Craft",
+      "Diplomacy",
+      "Escape Artist",
+      "Hide",
+      "Jump",
+      "Knowledge (arcana)",
+      "Knowledge (religion)",
+      "Listen",
+      "Move Silently",
+      "Perform",
+      "Profession",
+      "Sense Motive",
+      "Spot",
+      "Swim",
+      "Tumble"
+    ],
+    "bonusFeats": {
+      "monkBonusFeat1": [
+        1
+      ],
+      "monkBonusFeat2": [
+        2
+      ],
+      "monkBonusFeat6": [
+        6
+      ]
+    },
+    "features": {
+      "1": [
+        {
+          "name": "Flurry of blows",
+          "description": "When unarmored, a monk may strike with a flurry of blows at the expense of accuracy.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        },
+        {
+          "name": "Unarmed strike",
+          "description": "A monk gains Improved Unarmed Strike as a bonus feat. A monk may apply her full Strength bonus on damage rolls for all her unarmed strikes.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        },
+        {
+          "name": "AC Bonus",
+          "description": "When unarmored and unencumbered, the monk adds her Wisdom bonus (if any) to her AC.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "2": [
+        {
+          "name": "Evasion",
+          "description": "If a monk makes a successful Reflex saving throw against an attack that normally deals half damage on a successful save, she instead takes no damage.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "3": [
+        {
+          "name": "Still mind",
+          "description": "Gains a +2 bonus on saving throws against spells and effects from the school of enchantment.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Fast movement",
+          "description": "A monk gains an enhancement bonus to her speed.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "4": [
+        {
+          "name": "Ki strike (magic)",
+          "description": "Unarmed attacks are treated as magic weapons for the purpose of dealing damage to creatures with damage reduction.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Slow fall 20 ft.",
+          "description": "A monk within arm’s reach of a wall can use it to slow her descent.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "5": [
+        {
+          "name": "Purity of body",
+          "description": "Gains immunity to all diseases except for supernatural and magical diseases.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "6": [
+        {
+          "name": "Slow fall 30 ft.",
+          "description": "A monk within arm’s reach of a wall can use it to slow her descent.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Slow fall 20 ft."
+        }
+      ],
+      "7": [
+        {
+          "name": "Wholeness of body",
+          "description": "Can heal her own wounds. She can heal a number of hit points of damage equal to twice her current monk level each day.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "8": [
+        {
+          "name": "Slow fall 40 ft.",
+          "description": "A monk within arm’s reach of a wall can use it to slow her descent.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Slow fall 30 ft."
+        }
+      ],
+      "9": [
+        {
+          "name": "Improved evasion",
+          "description": "Takes no damage on a successful Reflex saving throw against attacks, but henceforth she takes only half damage on a failed save.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Evasion"
+        }
+      ],
+      "10": [
+        {
+          "name": "Ki strike (lawful)",
+          "description": "Unarmed attacks are treated as lawful weapons for the purpose of dealing damage to creatures with damage reduction.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Ki strike (magic)"
+        },
+        {
+          "name": "Slow fall 50 ft.",
+          "description": "A monk within arm’s reach of a wall can use it to slow her descent.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Slow fall 40 ft."
+        }
+      ],
+      "11": [
+        {
+          "name": "Diamond body",
+          "description": "Gains immunity to poisons of all kinds.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Greater flurry",
+          "description": "Gets a second extra attack at her full base attack bonus from flurry of blows.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false,
+          "replaces": "Flurry of blows"
+        }
+      ],
+      "12": [
+        {
+          "name": "Abundant step",
+          "description": "Can slip magically between spaces, as if using the spell dimension door, once per day.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Slow fall 60 ft.",
+          "description": "A monk within arm’s reach of a wall can use it to slow her descent.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Slow fall 50 ft."
+        }
+      ],
+      "13": [
+        {
+          "name": "Diamond soul",
+          "description": "Gains spell resistance equal to her current monk level + 10.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "14": [
+        {
+          "name": "Slow fall 70 ft.",
+          "description": "A monk within arm’s reach of a wall can use it to slow her descent.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Slow fall 60 ft."
+        }
+      ],
+      "15": [
+        {
+          "name": "Quivering palm",
+          "description": "Can set up vibrations within the body of another creature that can thereafter be fatal if the monk so desires.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": true,
+          "isSpecialQuality": false
+        }
+      ],
+      "16": [
+        {
+          "name": "Ki strike (adamantine)",
+          "description": "Unarmed attacks are treated as adamantine weapons for the purpose of dealing damage to creatures with damage reduction and bypassing hardness.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Ki strike (lawful)"
+        },
+        {
+          "name": "Slow fall 80 ft.",
+          "description": "A monk within arm’s reach of a wall can use it to slow her descent.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Slow fall 70 ft."
+        }
+      ],
+      "17": [
+        {
+          "name": "Timeless body",
+          "description": "No longer takes penalties to her ability scores for aging and cannot be magically aged.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Tongue of the sun and moon",
+          "description": "Can speak with any living creature.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "18": [
+        {
+          "name": "Slow fall 90 ft.",
+          "description": "A monk within arm’s reach of a wall can use it to slow her descent.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Slow fall 80 ft."
+        }
+      ],
+      "19": [
+        {
+          "name": "Empty body",
+          "description": "Gains the ability to assume an ethereal state for 1 round per monk level per day.",
+          "abilityType": "Su",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "20": [
+        {
+          "name": "Perfect self",
+          "description": "Becomes a magical creature. She is forevermore treated as an outsider rather than as a humanoid. Gains damage reduction 10/magic.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        },
+        {
+          "name": "Slow fall any distance",
+          "description": "A monk within arm’s reach of a wall can use it to slow her descent any distance without harm.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true,
+          "replaces": "Slow fall 90 ft."
+        }
+      ]
+    }
+  },
+  "Paladin": {
+    "source": "SRD",
+    "alignment": "Lawful good",
+    "hitDie": 10,
+    "babProgression": "good",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "poor"
+    },
+    "skillPoints": 2,
+    "classSkills": [
+      "Concentration",
+      "Craft",
+      "Diplomacy",
+      "Handle Animal",
+      "Heal",
+      "Knowledge (nobility and royalty)",
+      "Knowledge (religion)",
+      "Profession",
+      "Ride",
+      "Sense Motive"
+    ],
+    "spellcastingType": "prepared",
+    "spellSaveDCStat": "wis",
+    "spellSlotStat": "wis",
+    "spellSlots": {
+      "4": [
+        0
+      ],
+      "5": [
+        0
+      ],
+      "6": [
+        1
+      ],
+      "7": [
+        1
+      ],
+      "8": [
+        1,
+        0
+      ],
+      "9": [
+        1,
+        0
+      ],
+      "10": [
+        1,
+        1
+      ],
+      "11": [
+        1,
+        1,
+        0
+      ],
+      "12": [
+        1,
+        1,
+        1
+      ],
+      "13": [
+        1,
+        1,
+        1
+      ],
+      "14": [
+        2,
+        1,
+        1,
+        0
+      ],
+      "15": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "16": [
+        2,
+        2,
+        1,
+        1
+      ],
+      "17": [
+        2,
+        2,
+        2,
+        1
+      ],
+      "18": [
+        3,
+        2,
+        2,
+        1
+      ],
+      "19": [
+        3,
+        3,
+        3,
+        2
+      ],
+      "20": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    "features": {
+      "1": [
+        "Aura of good",
+        "Detect evil",
+        "Smite evil 1/day"
+      ],
+      "2": [
+        "Divine grace",
+        "Lay on hands"
+      ],
+      "3": [
+        "Aura of courage",
+        "Divine health"
+      ],
+      "4": [
+        "Turn undead"
+      ],
+      "5": [
+        "Smite evil 2/day",
+        "Special mount"
+      ],
+      "6": [
+        "Remove disease 1/week"
+      ],
+      "9": [
+        "Remove disease 2/week"
+      ],
+      "10": [
+        "Smite evil 3/day"
+      ],
+      "12": [
+        "Remove disease 3/week"
+      ],
+      "15": [
+        "Remove disease 4/week",
+        "Smite evil 4/day"
+      ],
+      "18": [
+        "Remove disease 5/week"
+      ],
+      "20": [
+        "Smite evil 5/day"
+      ]
+    }
+  }
+}

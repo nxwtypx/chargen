@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&D 3.5 Gestalt Generator</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app" v-cloak>
+    <header>
+      <h1>D&D 3.5 Gestalt Generator</h1>
+      <div class="controls">
+        <button @click="exportMarkdown">Export Markdown</button>
+        <button @click="exportWord">Export Word</button>
+      </div>
+    </header>
+
+    <div class="main-layout">
+      <!-- Left Panel: Base Stats -->
+      <div class="panel">
+        <h2>Character Basics</h2>
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" v-model="character.name" placeholder="Character Name">
+        </div>
+        <div class="form-group">
+          <label>Alignment</label>
+          <select v-model="character.alignment">
+            <option value="LG">Lawful Good</option>
+            <option value="NG">Neutral Good</option>
+            <option value="CG">Chaotic Good</option>
+            <option value="LN">Lawful Neutral</option>
+            <option value="TN">True Neutral</option>
+            <option value="CN">Chaotic Neutral</option>
+            <option value="LE">Lawful Evil</option>
+            <option value="NE">Neutral Evil</option>
+            <option value="CE">Chaotic Evil</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Character Type</label>
+          <select v-model="character.type">
+            <option value="PC">Player Character (PC)</option>
+            <option value="NPC">Non-Player Character (NPC)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Race</label>
+          <select v-model="character.race" @change="handleRaceChange">
+            <option v-for="(raceData, raceName) in rules.races" :key="raceName" :value="raceName">
+              {{ raceName }} {{ raceData.isMonster ? '(Monster)' : '' }}
+            </option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; margin-top: 15px;">
+          <h3 style="margin: 0;">Base Abilities</h3>
+          <div style="display: flex; gap: 15px; align-items: center;">
+            <div style="font-size: 0.9em; color: var(--text-secondary);">Point Buy: <strong style="color: var(--text-primary);">{{ pointBuyTotal }}</strong></div>
+            <button @click="rollStats" style="padding: 2px 8px; font-size: 0.8em; background: #333; border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px; cursor: pointer;">Randomize</button>
+          </div>
+        </div>
+        <div class="abilities-grid">
+          <div class="ability-box" v-for="(val, stat) in character.baseAbilities" :key="stat">
+            <h3>{{ stat }}</h3>
+            <input type="number" v-model.number="character.baseAbilities[stat]" min="3" max="18">
+            <div>Total: {{ getTotalAbility(stat) }}</div>
+            <div>Mod: <span style="color: var(--accent-color)">{{ getAbilityMod(stat) > 0 ? '+' : '' }}{{ getAbilityMod(stat) }}</span></div>
+          </div>
+        </div>
+
+        <div class="stat-summary">
+          <div class="stat-item">Level <span>{{ character.levels.length }}</span></div>
+          <div class="stat-item">Budget <span>{{ calculatedStats.budget.toLocaleString() }} gp</span></div>
+          <div class="stat-item">HP <span>{{ calculatedStats.hp }}</span></div>
+          <div class="stat-item">BAB <span>+{{ calculatedStats.bab }}</span></div>
+          <div class="stat-item">Fort <span>+{{ calculatedStats.saves.fort }}</span></div>
+          <div class="stat-item">Ref <span>+{{ calculatedStats.saves.ref }}</span></div>
+          <div class="stat-item">Will <span>+{{ calculatedStats.saves.will }}</span></div>
+          <div class="stat-item">Skills <span>{{ calculatedStats.skillPoints }} pts</span></div>
+        </div>
+        
+      </div>
+
+      <!-- Right Panel: Gestalt Level Track -->
+      <div class="panel">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h2>Gestalt Progression</h2>
+          <div style="display: flex; gap: 10px; align-items: center;">
+             <label style="font-size: 0.9em; color: var(--text-secondary); margin-right: 5px;">Target Level</label>
+             <button @click="addLevel">Add Level</button>
+             <button @click="removeLevel" :disabled="character.levels.length <= 1">Remove Level</button>
+          </div>
+        </div>
+        
+        <div class="gestalt-grid">
+          <div class="level-row header">
+            <div>Lvl</div>
+            <div>Track A (Class)</div>
+            <div>Track B (Class/Monster)</div>
+            <div>Feat</div>
+          </div>
+
+          <div v-for="(level, index) in character.levels" :key="index" class="level-row">
+            <div>{{ index + 1 }}</div>
+            
+            <!-- Track A Selection -->
+            <div>
+              <select v-model="level.trackA" :disabled="isMonsterForced(index, 'A')">
+                <option value="">-- Select Class --</option>
+                <option v-for="clsName in sortedClassesList" :key="clsName" :value="clsName" v-show="!rules.classes[clsName].isMonsterClass && clsName !== level.trackB">
+                  {{ clsName }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Track B Selection -->
+            <div>
+              <select v-model="level.trackB" :disabled="isMonsterForced(index, 'B')">
+                <option value="">-- Select Class --</option>
+                <option v-for="clsName in sortedClassesList" :key="clsName" :value="clsName" v-show="(!rules.classes[clsName].isMonsterClass || isMonsterForced(index, 'B')) && clsName !== level.trackA">
+                  {{ clsName }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Feat Selection -->
+            <div>
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div>
+                  <select v-model="level.feat" style="width: 100%;">
+                    <option value="">-- Select Feat --</option>
+                    <option v-for="(featData, featName) in rules.feats" :key="featName" :value="featName">
+                      {{ featName }}
+                    </option>
+                  </select>
+                  <div v-if="level.feat && !checkPrerequisites(level.feat, index)" class="feat-error">
+                    Prerequisites not met!
+                  </div>
+                </div>
+
+                <div v-for="tag in getBonusFeatTags(index)" :key="tag">
+                  <template v-if="rules.feats[tag]">
+                    <select disabled style="width: 100%; border-color: var(--accent-color); color: #888; background-color: #222;">
+                      <option :value="tag">{{ tag }}</option>
+                    </select>
+                  </template>
+                  <template v-else>
+                    <select v-model="level.bonusFeats[tag]" style="width: 100%; border-color: var(--accent-color);">
+                      <option value="" disabled selected>-- Select {{ formatBonusFeatName(tag) }} --</option>
+                      <option v-for="(featData, featName) in rules.feats" :key="'bf_'+featName" :value="featName" v-show="tag === 'humanBonusFeat' || featData[tag]">
+                        {{ featName }}
+                      </option>
+                    </select>
+                    <div v-if="level.bonusFeats[tag] && !tag.startsWith('monkBonusFeat') && !checkPrerequisites(level.bonusFeats[tag], index)" class="feat-error">
+                      Prerequisites not met!
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foldout">
+          <div class="foldout-header" @click="ui.showFeatures = !ui.showFeatures">
+            <span>Class & Race Features</span>
+            <span>{{ ui.showFeatures ? '▼' : '▶' }}</span>
+          </div>
+          <div class="foldout-content" v-show="ui.showFeatures">
+            <div v-if="character.levels.some(l => l.trackA === 'Cleric' || l.trackB === 'Cleric') && character.alignment === 'TN'" style="margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 4px;">
+              <label style="display: block; font-size: 0.9em; margin-bottom: 3px; font-weight: bold; color: var(--accent-color);">Turn/Rebuke Undead (Neutral Cleric Choice)</label>
+              <select v-model="character.turnUndeadChoice" style="width: 100%;">
+                <option value="">-- Choose --</option>
+                <option value="Turn">Turn Undead (Cure Spells)</option>
+                <option value="Rebuke">Rebuke Undead (Inflict Spells)</option>
+              </select>
+            </div>
+            <ul style="margin: 0; padding-left: 20px;">
+              <!-- Race Features -->
+              <template v-if="rules.races[character.race] && rules.races[character.race].features">
+                <li v-for="feature in rules.races[character.race].features" :key="typeof feature === 'string' ? 'rf_'+feature : 'rf_'+feature.name" style="margin-bottom: 5px;">
+                  <template v-if="typeof feature === 'string'">
+                    <span style="color: #61afef; font-weight: bold;">{{ feature }}</span>
+                  </template>
+                  <template v-else-if="feature.showOnSheet">
+                    <span style="color: #61afef; font-weight: bold;">{{ feature.name }}</span>
+                    <span v-if="feature.abilityType" style="color: var(--text-secondary); font-size: 0.85em;">({{ feature.abilityType }})</span>:
+                    <span style="font-size: 0.9em;">{{ feature.description }}</span>
+                  </template>
+                </li>
+              </template>
+              
+              <!-- Class Features -->
+              <li v-for="feature in calculatedStats.features" :key="typeof feature === 'string' ? 'cf_'+feature : 'cf_'+feature.name" style="margin-bottom: 5px;">
+                <template v-if="typeof feature === 'string'">
+                  <strong>{{ feature }}</strong>
+                </template>
+                <template v-else>
+                  <strong>{{ feature.name }}</strong>
+                  <span v-if="feature.abilityType" style="color: var(--text-secondary); font-size: 0.85em;">({{ feature.abilityType }})</span>:
+                  <span style="font-size: 0.9em;">{{ feature.description }}</span>
+                </template>
+              </li>
+
+              <li v-if="calculatedStats.features.length === 0 && (!rules.races[character.race] || !rules.races[character.race].features || rules.races[character.race].features.length === 0)">None yet.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="foldout" v-for="className in spellcastingClasses" :key="className">
+          <div class="foldout-header" @click="ui.showSpells = !ui.showSpells">
+            <span>Spells ({{ className }})</span>
+            <span>{{ ui.showSpells ? '▼' : '▶' }}</span>
+          </div>
+          <div class="foldout-content" v-show="ui.showSpells">
+             <div v-for="slotInfo in classSlots(className)" :key="slotInfo.level" style="margin-bottom: 12px;">
+                <h4 style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #444; padding-bottom: 3px; margin: 0 0 5px 0;">
+                  <span>Level {{ slotInfo.level }}</span>
+                  <span style="font-size: 0.8em; font-weight: normal; color: #bbb;">
+                    <template v-if="slotInfo.canCast">
+                      {{ slotInfo.total }} slots/day
+                      <span v-if="slotInfo.bonus > 0" style="color: #61afef;">
+                        ({{ slotInfo.base }} base + {{ slotInfo.bonus }} {{ slotInfo.statName.charAt(0).toUpperCase() + slotInfo.statName.slice(1) }})
+                      </span>
+                    </template>
+                    <template v-else>
+                      <span style="color: #ff7b72; font-weight: bold;">Locked (Requires {{ slotInfo.requiredScore }} {{ slotInfo.statName.charAt(0).toUpperCase() + slotInfo.statName.slice(1) }})</span>
+                    </template>
+                  </span>
+                </h4>
+                <div v-if="slotInfo.canCast && character.preparedSpells[className]" style="margin: 0; padding-left: 0; display: flex; flex-direction: column; gap: 5px;">
+                  <div v-for="(slotVal, idx) in character.preparedSpells[className][slotInfo.level]" :key="'slot_'+slotInfo.level+'_'+idx">
+                    <select v-model="character.preparedSpells[className][slotInfo.level][idx]" style="width: 100%; max-width: 300px;">
+                      <option value="">-- Empty Slot --</option>
+                      <option v-for="spell in getSortedSpells(className, slotInfo.level)" :key="'opt_'+spell" :value="spell">{{ spell }}</option>
+                    </select>
+                  </div>
+                </div>
+                <ul v-else style="margin: 0; padding-left: 20px;">
+                  <li style="list-style-type: none; color: #8b949e; font-style: italic; margin-left: -20px;">
+                    Spells hidden ({{ slotInfo.statName.charAt(0).toUpperCase() + slotInfo.statName.slice(1) }} score too low)
+                  </li>
+                </ul>
+             </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- end main-layout -->
+
+    <!-- Skills Panel -->
+    <div class="panel skills-panel" style="margin-top: 20px;">
+      <h2>Skills</h2>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
+        <div v-for="pool in skillPools" :key="pool.name" style="background: var(--bg-color); padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); flex: 1; min-width: 200px;">
+          <h4 style="margin: 0 0 5px 0;">{{ pool.name }}</h4>
+          <div>Points: <strong :style="{ color: pool.remaining < 0 ? '#ff6b6b' : 'var(--accent-color)' }">{{ pool.remaining }}</strong> / {{ pool.total }} remaining</div>
+        </div>
+      </div>
+      
+      <table style="width: 100%; text-align: left; border-collapse: collapse;">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <th style="padding: 5px;">Skill</th>
+            <th style="padding: 5px;">Specialization</th>
+            <th style="padding: 5px;">Paid From</th>
+            <th style="padding: 5px; width: 100px;">Points</th>
+            <th style="padding: 5px; width: 100px;">Rate</th>
+            <th style="padding: 5px; width: 60px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(alloc, idx) in character.skillAllocations" :key="idx" style="border-bottom: 1px solid #333;">
+            <td style="padding: 5px;">
+              <select v-model="alloc.skill" style="width: 100%;">
+                <option value="">-- Select Skill --</option>
+                <option v-for="(sData, sName) in rules.skills" :key="sName" :value="sName">
+                  {{ sName }}{{ (alloc.pool && !isClassSkill(sName, alloc.pool)) ? ' (cc)' : '' }}
+                </option>
+              </select>
+            </td>
+            <td style="padding: 5px;">
+              <input type="text" v-model="alloc.spec" v-if="rules.skills && alloc.skill && rules.skills[alloc.skill] && rules.skills[alloc.skill].hasSpecialization" placeholder="e.g. Blacksmithing" style="width: 100%;">
+            </td>
+            <td style="padding: 5px;">
+              <select v-model="alloc.pool" style="width: 100%;">
+                <option value="">-- Select Pool --</option>
+                <option v-for="pool in skillPools" :key="'p_'+pool.name" :value="pool.name">{{ pool.name }}</option>
+              </select>
+            </td>
+            <td style="padding: 5px;">
+              <input type="number" v-model.number="alloc.points" min="0" @input="clampSkillAllocation(alloc)" @dblclick="maximizeSkillAllocation(alloc)" style="width: 100%;">
+            </td>
+            <td style="padding: 5px; color: var(--text-secondary); font-size: 0.9em;">
+              <span v-if="alloc.skill && alloc.pool">
+                {{ isClassSkill(alloc.skill, alloc.pool) ? '1:1 (Class)' : '2:1 (Cross)' }}
+              </span>
+            </td>
+            <td style="padding: 5px;">
+              <button @click="character.skillAllocations.splice(idx, 1)" style="background: transparent; color: #ff6b6b; border: none; cursor: pointer;">X</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div style="margin-top: 10px;">
+        <button @click="addSkillAllocation" class="tab-btn">+ Add Skill Allocation</button>
+      </div>
+    </div>
+    <!-- Spellcasting Panel -->
+    <div class="panel" style="margin-top: 20px;" v-if="preparedCasters.length > 0 || spontaneousCasters.length > 0">
+      <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" @click="ui.showSpells = !ui.showSpells">
+        <h2>Spellcasting</h2>
+        <span style="font-size: 1.5em; color: var(--accent-color);">{{ ui.showSpells ? '▼' : '▶' }}</span>
+      </div>
+      
+      <div v-show="ui.showSpells" style="margin-top: 15px;">
+        
+        <!-- Prepared Casters -->
+        <div v-if="preparedCasters.length > 0" style="margin-bottom: 20px;">
+          <h3 style="border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">Spells Prepared</h3>
+          <div v-for="c in preparedCasters" :key="c" style="margin-bottom: 20px; padding: 15px; border: 1px solid var(--border-color); border-radius: 4px; background: rgba(0,0,0,0.2);">
+            <h4 style="margin-top: 0; color: var(--accent-color);">{{ c }} Spells</h4>
+            
+            <div v-if="c === 'Cleric'" style="margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 4px;">
+              <h5 style="margin-top: 0; margin-bottom: 10px; color: var(--text-primary);">Cleric Options</h5>
+              
+              <div style="margin-bottom: 10px;">
+                <label style="display: block; font-size: 0.9em; margin-bottom: 3px;">Domains</label>
+                <div style="display: flex; gap: 10px;">
+                  <select v-model="character.domains[0]" style="flex: 1;">
+                    <option value="">-- Domain 1 --</option>
+                    <option v-for="(domainData, domainName) in rules.domains" :key="'d1_'+domainName" :value="domainName">{{ domainName }}</option>
+                  </select>
+                  <select v-model="character.domains[1]" style="flex: 1;">
+                    <option value="">-- Domain 2 --</option>
+                    <option v-for="(domainData, domainName) in rules.domains" :key="'d2_'+domainName" :value="domainName">{{ domainName }}</option>
+                  </select>
+                </div>
+              </div>
+              
+            </div>
+            
+            <div v-for="slotInfo in classSlots(c)" :key="slotInfo.level" style="margin-bottom: 10px;">
+              <div v-if="slotInfo.total > 0">
+                <strong style="display: block; margin-bottom: 5px;">Level {{ slotInfo.level }} ({{ slotInfo.total }} slots)</strong>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                  <select v-for="(val, idx) in character.preparedSpells[c][slotInfo.level]" 
+                          :key="idx" 
+                          v-model="character.preparedSpells[c][slotInfo.level][idx]"
+                          style="width: 200px;">
+                    <option value="">-- Select Spell --</option>
+                    <option v-for="spellName in getSortedSpells(c, slotInfo.level)" :key="spellName" :value="spellName">
+                      {{ spellName }}
+                    </option>
+                  </select>
+                  
+                  <select v-if="slotInfo.hasDomainSlot" 
+                          v-model="character.preparedDomainSpells[c][slotInfo.level]"
+                          style="width: 200px; border-color: var(--accent-color);">
+                    <option value="">-- Domain Spell --</option>
+                    <option v-for="spellName in getAvailableDomainSpells(slotInfo.level)" :key="'d_'+spellName" :value="spellName">
+                      {{ spellName }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spontaneous Casters -->
+        <div v-if="spontaneousCasters.length > 0">
+          <h3 style="border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">Spells Known</h3>
+          <div v-for="c in spontaneousCasters" :key="c" style="margin-bottom: 20px; padding: 15px; border: 1px solid var(--border-color); border-radius: 4px; background: rgba(0,0,0,0.2);">
+            <h4 style="margin-top: 0; color: var(--accent-color);">{{ c }} Spells</h4>
+            
+            <div v-for="slotInfo in classKnownSlots(c)" :key="slotInfo.level" style="margin-bottom: 10px;">
+              <div v-if="slotInfo.total > 0">
+                <strong style="display: block; margin-bottom: 5px;">Level {{ slotInfo.level }} ({{ slotInfo.total }} known)</strong>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                  <select v-for="(val, idx) in character.knownSpells[c][slotInfo.level]" 
+                          :key="idx" 
+                          v-model="character.knownSpells[c][slotInfo.level][idx]"
+                          style="width: 200px;">
+                    <option value="">-- Select Spell --</option>
+                    <option v-for="spellName in getSortedKnownSpells(c, slotInfo.level)" :key="spellName" :value="spellName">
+                      {{ spellName }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Equipment Shop Panel -->
+    <div class="panel shop-panel" style="margin-top: 20px;">
+      <h2>Equipment Shop</h2>
+      
+      <div class="shop-layout">
+        <!-- Inventory -->
+        <div class="inventory-section">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>Inventory</h3>
+            <div class="budget-display" :style="{ color: remainingBudget < 0 ? '#ff6b6b' : 'var(--accent-color)', fontWeight: 'bold' }">
+              Budget: {{ (remainingBudget || 0).toLocaleString() }} gp
+            </div>
+          </div>
+          
+          <ul class="inventory-list">
+            <li v-for="(weapon, index) in character.weapons" :key="'w_'+index" class="inventory-item">
+              <div class="item-info">
+                <strong>{{ weapon.name }}</strong> ({{ weapon.size }})
+                <div class="item-stats">
+                  Dmg: {{ getWeaponDamage(weapon) }} | Crit: {{ weapon.critical }}
+                </div>
+              </div>
+              <div class="item-actions">
+                <span class="cost-label">{{ weapon.cost }}</span>
+                <button class="sell-btn" @click="sellWeapon(index)">Sell</button>
+              </div>
+            </li>
+            <li v-for="(armorItem, index) in character.armor" :key="'a_'+index" class="inventory-item">
+              <div class="item-info">
+                <strong>{{ armorItem.name }}</strong> ({{ armorItem.size }})
+                <div class="item-stats">
+                  AC Bonus: +{{ armorItem.acBonus }} | Cat: {{ armorItem.category }}
+                </div>
+              </div>
+              <div class="item-actions">
+                <span class="cost-label">{{ armorItem.cost }}</span>
+                <button class="sell-btn" @click="sellArmor(index)">Sell</button>
+              </div>
+            </li>
+            <li v-if="character.weapons.length === 0 && character.armor.length === 0" style="color: #888; font-style: italic; padding: 10px 0;">
+              No equipment purchased.
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Shop -->
+        <div class="store-section">
+          <div class="shop-tabs">
+            <button :class="{ active: ui.shopTab === 'Weapons' }" @click="setShopTab('Weapons')" class="tab-btn">Weapons</button>
+            <button :class="{ active: ui.shopTab === 'Armor' }" @click="setShopTab('Armor')" class="tab-btn">Armor & Shields</button>
+          </div>
+
+          <div class="store-controls">
+            <input type="text" v-model="ui.shopSearch" :placeholder="'Search ' + ui.shopTab.toLowerCase() + '...'" style="flex: 1;">
+            
+            <select v-model="ui.shopCategory" style="width: 150px;" v-if="ui.shopTab === 'Weapons'">
+              <option value="">All Categories</option>
+              <option value="Simple">Simple</option>
+              <option value="Martial">Martial</option>
+              <option value="Exotic">Exotic</option>
+            </select>
+
+            <select v-model="ui.shopCategory" style="width: 150px;" v-if="ui.shopTab === 'Armor'">
+              <option value="">All Categories</option>
+              <option value="Light armor">Light Armor</option>
+              <option value="Medium armor">Medium Armor</option>
+              <option value="Heavy armor">Heavy Armor</option>
+              <option value="Shield">Shield</option>
+              <option value="Extra">Extras</option>
+            </select>
+            
+            <div style="font-size: 0.9em; padding-left: 10px;">
+              Scaling for: <strong style="color: var(--accent-color)">{{ characterSize }}</strong>
+            </div>
+          </div>
+          
+          <div class="store-grid" v-if="ui.shopTab === 'Weapons'">
+            <div class="store-item" v-for="(weapon, index) in filteredWeapons" :key="'w_shop_' + index">
+              <div class="store-item-header">
+                <strong>{{ weapon.name }}</strong>
+                <span class="store-category">{{ weapon.category }}</span>
+              </div>
+              <div class="store-item-stats">
+                <div>Dmg: {{ getWeaponDamage(weapon) }}</div>
+                <div>Crit: {{ weapon.critical }}</div>
+                <div>Type: {{ weapon.damageType }}</div>
+              </div>
+              <div class="store-item-buy">
+                <span class="cost">{{ weapon.cost[characterSize] || '—' }}</span>
+                <button class="buy-btn" @click="buyWeapon(weapon)" :disabled="!weapon.cost[characterSize]">Buy</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="store-grid" v-if="ui.shopTab === 'Armor'">
+            <div class="store-item" v-for="(armorItem, index) in filteredArmor" :key="'a_shop_' + index">
+              <div class="store-item-header">
+                <strong>{{ armorItem.name }}</strong>
+                <span class="store-category">{{ armorItem.category }}</span>
+              </div>
+              <div class="store-item-stats">
+                <div v-if="armorItem.acBonus > 0">AC Bonus: +{{ armorItem.acBonus }}</div>
+                <div v-if="armorItem.maxDex !== 99 && armorItem.maxDex !== undefined && armorItem.maxDex !== null">Max Dex: +{{ armorItem.maxDex }}</div>
+                <div v-if="armorItem.checkPenalty < 0">Check Penalty: {{ armorItem.checkPenalty }}</div>
+                <div v-if="armorItem.spellFailure !== '—'">Spell Fail: {{ armorItem.spellFailure }}</div>
+                <div v-if="armorItem.scaledWeight[characterSize]">Weight: {{ armorItem.scaledWeight[characterSize] }}</div>
+              </div>
+              <div class="store-item-buy">
+                <span class="cost">{{ armorItem.scaledCost[characterSize] || '—' }}</span>
+                <button class="buy-btn" @click="buyArmor(armorItem)" :disabled="!armorItem.scaledCost[characterSize]">Buy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- Equipped Gear Panel -->
+    <div class="panel" style="margin-top: 20px;">
+      <h2>Equipped Gear</h2>
+      
+      <div class="equipped-layout" style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <!-- Weapon Sets -->
+        <div class="weapon-sets" style="flex: 1; min-width: 300px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h3>Weapon Sets</h3>
+            <button @click="addWeaponSet" class="tab-btn">+ Add Set</button>
+          </div>
+          
+          <div v-for="(ws, index) in character.equipped.weapons" :key="index" style="background: #222; padding: 10px; border-radius: 4px; margin-bottom: 10px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+              <strong>Set {{ index + 1 }}</strong>
+              <button @click="removeWeaponSet(index)" style="background: transparent; color: #ff6b6b; border: none; cursor: pointer; padding: 0;">Remove</button>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <div style="flex: 1;">
+                <label style="display: block; font-size: 0.8em; color: var(--text-secondary); margin-bottom: 3px;">Primary Hand</label>
+                <select v-model="ws.primary" style="width: 100%;">
+                  <option :value="-1">-- Empty --</option>
+                  <option v-for="(w, wIdx) in character.weapons" :key="'pw_'+wIdx" :value="'w_'+wIdx">{{ w.name }} ({{ w.size }})</option>
+                </select>
+                <div v-if="ws.primary !== -1 && canWieldTwoHanded(ws.primary)" style="margin-top: 5px; font-size: 0.85em;">
+                  <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text-primary);">
+                    <input type="checkbox" v-model="ws.wieldTwoHanded"> Wield Two-Handed
+                  </label>
+                </div>
+              </div>
+              <div style="flex: 1;">
+                <label style="display: block; font-size: 0.8em; color: var(--text-secondary); margin-bottom: 3px;">Off-Hand</label>
+                <select v-model="ws.offhand" style="width: 100%;" :disabled="isTwoHandedWield(ws)">
+                  <option :value="-1">-- Empty --</option>
+                  <optgroup label="Weapons">
+                    <option v-for="(w, wIdx) in character.weapons" :key="'ow_'+wIdx" :value="'w_'+wIdx">{{ w.name }} ({{ w.size }})</option>
+                  </optgroup>
+                  <optgroup label="Shields">
+                    <option v-for="(a, aIdx) in character.armor" v-if="a.category === 'Shield'" :key="'oa_'+aIdx" :value="'a_'+aIdx">{{ a.name }} ({{ a.size }})</option>
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chakras -->
+        <div class="chakras" style="flex: 1; min-width: 300px;">
+          <h3>Chakra Slots</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div v-for="slot in ['Head', 'Face', 'Throat', 'Shoulders', 'Torso', 'Arms', 'Hands', 'Waist', 'Ring1', 'Ring2', 'Feet']" :key="slot">
+              <label style="display: block; font-size: 0.8em; color: var(--text-secondary); margin-bottom: 3px;">{{ slot.replace('Ring1', 'Ring 1').replace('Ring2', 'Ring 2') }}</label>
+              <input type="text" v-model="character.equipped.chakras[slot]" :placeholder="'Magic item...'" style="width: 100%;">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.8em; color: var(--text-secondary); margin-bottom: 3px;">Body (Armor)</label>
+              <select v-model="character.equipped.chakras.Body" style="width: 100%;">
+                <option :value="-1">-- No Armor --</option>
+                <option v-for="(a, aIdx) in character.armor" v-if="a.category.includes('armor')" :key="'ba_'+aIdx" :value="aIdx">{{ a.name }} ({{ a.size }})</option>
+              </select>
+            </div>
+          </div>
+          
+          <div style="margin-top: 15px;">
+            <label style="display: block; font-size: 0.8em; color: var(--text-secondary); margin-bottom: 3px;">Other / Backpack</label>
+            <textarea v-model="character.equipped.other" rows="3" style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-primary); padding: 8px;" placeholder="Potions, rope, torches..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

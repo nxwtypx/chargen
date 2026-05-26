@@ -1,0 +1,230 @@
+{
+  "Air": {
+    "name": "Air",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Turn or destroy earth creatures as a good cleric turns undead. Rebuke, command, or bolster air creatures as an evil cleric rebukes undead. Use these abilities a total number of times per day equal to 3 + your Charisma modifier. This granted power is a supernatural ability."
+  },
+  "Animal": {
+    "name": "Animal",
+    "classSkills": [
+      "Knowledge (nature)"
+    ],
+    "bonusFeats": [],
+    "description": "You can use speak with animals once per day as a spell-like ability. Add Knowledge (nature) to your list of cleric class skills."
+  },
+  "Chaos": {
+    "name": "Chaos",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "You cast chaos spells at +1 caster level."
+  },
+  "Death": {
+    "name": "Death",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "You may use a death touch once per day. Your death touch is a supernatural ability that produces a death effect. You must succeed on a melee touch attack against a living creature (using the rules for touch spells). When you touch, roll 1d6 per cleric level you possess. If the total at least equals the creature’s current hit points, it dies (no save)."
+  },
+  "Destruction": {
+    "name": "Destruction",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "You gain the smite power, the supernatural ability to make a single melee attack with a +4 bonus on attack rolls and a bonus on damage rolls equal to your cleric level (if you hit). You must declare the smite before making the attack. This ability is usable once per day."
+  },
+  "Earth": {
+    "name": "Earth",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Turn or destroy air creatures as a good cleric turns undead. Rebuke, command, or bolster earth creatures as an evil cleric rebukes undead. Use these abilities a total number of times per day equal to 3 + your Charisma modifier. This granted power is a supernatural ability."
+  },
+  "Evil": {
+    "name": "Evil",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "You cast evil spells at +1 caster level."
+  },
+  "Fire": {
+    "name": "Fire",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Turn or destroy water creatures as a good cleric turns undead. Rebuke, command, or bolster fire creatures as an evil cleric rebukes undead. Use these abilities a total number of times per day equal to 3 + your Charisma modifier. This granted power is a supernatural ability."
+  },
+  "Good": {
+    "name": "Good",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "You cast good spells at +1 caster level."
+  },
+  "Healing": {
+    "name": "Healing",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "You cast healing spells at +1 caster level."
+  },
+  "Knowledge": {
+    "name": "Knowledge",
+    "classSkills": [
+      "all Knowledge skills"
+    ],
+    "bonusFeats": [],
+    "description": "Add all Knowledge skills to your list of cleric class skills.\nYou cast divination spells at +1 caster level."
+  },
+  "Law": {
+    "name": "Law",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "You cast law spells at +1 caster level."
+  },
+  "Luck": {
+    "name": "Luck",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "You gain the power of good fortune, which is usable once per day. This extraordinary ability allows you to reroll one roll that you have just made before the game master declares whether the roll results in success or failure. You must take the result of the reroll, even if it’s worse than the original roll."
+  },
+  "Magic": {
+    "name": "Magic",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Use scrolls, wands, and other devices with spell completion or spell trigger activation as a wizard of one-half your cleric level (at least 1st level). For the purpose of using a scroll or other magic device, if you are also a wizard, actual wizard levels and these effective wizard levels stack."
+  },
+  "Plant": {
+    "name": "Plant",
+    "classSkills": [
+      "Knowledge (nature)"
+    ],
+    "bonusFeats": [],
+    "description": "Rebuke or command plant creatures as an evil cleric rebukes or commands undead. Use this ability a total number of times per day equal to 3 + your Charisma modifier. This granted power is a supernatural ability.\nAdd Knowledge (nature) to your list of cleric class skills."
+  },
+  "Protection": {
+    "name": "Protection",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "You can generate a protective ward as a supernatural ability. Grant someone you touch a resistance bonus equal to your cleric level on his or her next saving throw. Activating this power is a standard action. The protective ward is an abjuration effect with a duration of 1 hour that is usable once per day."
+  },
+  "Strength": {
+    "name": "Strength",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "You can perform a feat of strength as a supernatural ability. You gain an enhancement bonus to Strength equal to your cleric level. Activating the power is a free action, the power lasts 1 round, and it is usable once per day."
+  },
+  "Sun": {
+    "name": "Sun",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Once per day, you can perform a greater turning against undead in place of a regular turning. The greater turning is like a normal turning except that the undead creatures that would be turned are destroyed instead."
+  },
+  "Travel": {
+    "name": "Travel",
+    "classSkills": [
+      "Survival"
+    ],
+    "bonusFeats": [],
+    "description": "For a total time per day of 1 round per cleric level you possess, you can act normally regardless of magical effects that impede movement as if you were affected by the spell freedom of movement. This effect occurs automatically as soon as it applies, lasts until it runs out or is no longer needed, and can operate multiple times per day (up to the total daily limit of rounds). This granted power is a supernatural ability.\nAdd Survival to your list of cleric class skills."
+  },
+  "Trickery": {
+    "name": "Trickery",
+    "classSkills": [
+      "Bluff",
+      "Disguise",
+      "Hide"
+    ],
+    "bonusFeats": [],
+    "description": "Add Bluff, Disguise, and Hide to your list of cleric class skills."
+  },
+  "War": {
+    "name": "War",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Free Martial Weapon Proficiency with deity’s favored weapon (if necessary) and Weapon Focus with the deity’s favored weapon."
+  },
+  "Water": {
+    "name": "Water",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Turn or destroy fire creatures as a good cleric turns undead. Rebuke, command, or bolster water creatures as an evil cleric rebukes undead. Use these abilities a total number of times per day equal to 3 + your Charisma modifier. This granted power is a supernatural ability."
+  },
+  "Artifice": {
+    "name": "Artifice",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Gain +4 bonus on Craft checks. The character casts conjuration (creation) spells at +1 caster level. (Those with access to both the Artifice and Creation domains cast conjuration [creation] spells at +3 caster level.)"
+  },
+  "Charm": {
+    "name": "Charm",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "The character can boost his or her Charisma by 4 points once per day. Activating this power is a free action. The Charisma increase lasts 1 minute."
+  },
+  "Community": {
+    "name": "Community",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Use calm emotions as a spell-like ability once per day. Gain a +2 competence bonus on Diplomacy checks."
+  },
+  "Creation": {
+    "name": "Creation",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Cast conjuration (creation) spells at +2 caster level. (Those with access to both the Artifice and Creation domains cast conjuration (creation) spells at +3 caster level.)"
+  },
+  "Darkness": {
+    "name": "Darkness",
+    "classSkills": [],
+    "bonusFeats": [
+      "Blind-Fight"
+    ],
+    "description": "Free Blind-Fight feat."
+  },
+  "Glory": {
+    "name": "Glory",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Turn undead with a +2 bonus on the turning check and +1d6 to the turning damage roll."
+  },
+  "Liberation": {
+    "name": "Liberation",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "The character gains a +2 morale bonus on all saving throws against enchantment spells or effects."
+  },
+  "Madness": {
+    "name": "Madness",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "The character gains an Insanity score equal to half his or her class level. For spellcasting (determining bonus spells and DCs), the character uses his or her Wisdom score plus his or her Insanity score in place of Wisdom alone.\nFor all other purposes, such as skills and saves, use Wisdom minus Insanity in place of Wisdom.\nOnce per day, the character can see and act with the clarity of true madness. Use the character’s Insanity score as a positive rather than a negative modifier on a single roll involving Wisdom. Choose to use this power before the roll is made."
+  },
+  "Nobility": {
+    "name": "Nobility",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "The character has the spell-like ability to inspire allies, giving them a +2 morale bonus on saving throws, attack rolls, ability checks, skill checks, and weapon damage rolls. Allies must be able to hear the character speak for 1 round. Using this ability is a standard action. It lasts a number of rounds equal to the character’s Charisma bonus and can be used once per day."
+  },
+  "Repose": {
+    "name": "Repose",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "The character may use a death touch once per day. The death touch is a spell-like ability that is a death effect. The character must succeed at a melee touch attack against a living creature (using the rules for touch spells). When the character touches, roll 1d6 per his or her cleric level. If the total at least equals the creature’s current hit points, it dies."
+  },
+  "Rune": {
+    "name": "Rune",
+    "classSkills": [],
+    "bonusFeats": [
+      "Scribe Scroll"
+    ],
+    "description": "Free Scribe Scroll feat."
+  },
+  "Scalykind": {
+    "name": "Scalykind",
+    "classSkills": [],
+    "bonusFeats": [],
+    "description": "Rebuke or command animals (reptilian creatures and snakes only) as an evil cleric rebukes or commands undead. Use this ability a total number of times per day equal to 3 + Charisma modifier."
+  },
+  "Weather": {
+    "name": "Weather",
+    "classSkills": [
+      "Survival"
+    ],
+    "bonusFeats": [],
+    "description": "Survival is a class skill."
+  }
+}

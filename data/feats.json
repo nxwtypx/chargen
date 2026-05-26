@@ -1,0 +1,242 @@
+{
+  "Augment Healing": {
+    "name": "Augment Healing",
+    "description": "Add +2 points per spell level to the amount of damage healed by any Conjuration [Healing] spell that you cast.",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "SKILL",
+          "skill": "Heal",
+          "value": 4
+        }
+      ]
+    }
+  },
+  "Combat Casting": {
+    "name": "Combat Casting",
+    "description": "You get a +4 bonus on Concentration checks made to cast a spell or use a spell-like ability while on the defensive.",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": []
+    }
+  },
+  "Combat Reflexes": {
+    "name": "Combat Reflexes",
+    "description": "You may make a number of additional attacks of opportunity equal to your Dexterity bonus.",
+    "fighterBonusFeat": true,
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": []
+    },
+    "monkBonusFeat2": true
+  },
+  "Deflect Arrows": {
+    "name": "Deflect Arrows",
+    "description": "Once per round when you would normally be hit with a ranged weapon, you may deflect it so that you take no damage from it. You must be aware of the attack and not flat-footed.",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "ABILITY",
+          "ability": "dex",
+          "value": 13
+        },
+        {
+          "type": "FEAT",
+          "value": "Improved Unarmed Strike"
+        }
+      ]
+    },
+    "monkBonusFeat2": true
+  },
+  "Deft Opportunist": {
+    "name": "Deft Opportunist",
+    "description": "You get a +4 bonus on attack rolls when making attacks of opportunity.",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "ABILITY",
+          "ability": "dex",
+          "value": 15
+        },
+        {
+          "type": "FEAT",
+          "value": "Combat Reflexes"
+        }
+      ]
+    }
+  },
+  "Dodge": {
+    "name": "Dodge",
+    "description": "You gain a +1 dodge bonus to your AC against attacks from your current target.",
+    "fighterBonusFeat": true,
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "ABILITY",
+          "ability": "dex",
+          "value": 13
+        }
+      ]
+    }
+  },
+  "Improved Disarm": {
+    "name": "Improved Disarm",
+    "description": "You do not provoke an attack of opportunity when you attempt to disarm an opponent, nor does the opponent have a chance to disarm you. You also gain a +4 bonus on the opposed attack roll you make to disarm your opponent.",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "ABILITY",
+          "ability": "int",
+          "value": 13
+        },
+        {
+          "type": "FEAT",
+          "value": "Combat Expertise"
+        }
+      ]
+    },
+    "monkBonusFeat6": true
+  },
+  "Improved Grapple": {
+    "name": "Improved Grapple",
+    "description": "You do not provoke an attack of opportunity when you make a touch attack to start a grapple. You also gain a +4 bonus on all grapple checks, regardless of whether you started the grapple.",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "ABILITY",
+          "ability": "dex",
+          "value": 13
+        },
+        {
+          "type": "FEAT",
+          "value": "Improved Unarmed Strike"
+        }
+      ]
+    },
+    "monkBonusFeat1": true
+  },
+  "Improved Trip": {
+    "name": "Improved Trip",
+    "description": "You do not provoke an attack of opportunity when you attempt to trip an opponent while you are unarmed. You also gain a +4 bonus on your Strength check to trip your opponent.",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "ABILITY",
+          "ability": "int",
+          "value": 13
+        },
+        {
+          "type": "FEAT",
+          "value": "Combat Expertise"
+        }
+      ]
+    },
+    "monkBonusFeat6": true
+  },
+  "Improved Unarmed Strike": {
+    "name": "Improved Unarmed Strike",
+    "description": "You are considered to be armed even when unarmed —that is, you do not provoke attacks of opportunity from armed opponents when you attack them while unarmed."
+  },
+  "Mobility": {
+    "name": "Mobility",
+    "description": "You get a +4 dodge bonus to Armor Class against attacks of opportunity caused when you move out of or within a threatened area.",
+    "fighterBonusFeat": true,
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "ABILITY",
+          "ability": "dex",
+          "value": 13
+        },
+        {
+          "type": "FEAT",
+          "value": "Dodge"
+        }
+      ]
+    }
+  },
+  "Skill Focus (Heal)": {
+    "name": "Skill Focus (Heal)",
+    "description": "You get a +3 bonus on all checks involving that skill.",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": []
+    }
+  },
+  "Spellcasting Prodigy (Healer)": {
+    "name": "Spellcasting Prodigy (Healer)",
+    "description": "Treat your primary spellcasting ability score as 2 points higher for determining bonus spells and save DCs. This feat can only be taken at 1st level.",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "LEVEL",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "Spring Attack": {
+    "name": "Spring Attack",
+    "description": "When using the attack action with a melee weapon, you can move both before and after the attack.",
+    "fighterBonusFeat": true,
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "ABILITY",
+          "ability": "dex",
+          "value": 13
+        },
+        {
+          "type": "FEAT",
+          "value": "Dodge"
+        },
+        {
+          "type": "FEAT",
+          "value": "Mobility"
+        },
+        {
+          "type": "BAB",
+          "value": 4
+        }
+      ]
+    }
+  },
+  "Stunning Fist": {
+    "name": "Stunning Fist",
+    "description": "Stunning Fist forces a foe damaged by your unarmed attack to make a Fortitude saving throw (DC 10 + 1/2 your character level + your Wis modifier), in addition to dealing damage normally. A defender who fails this saving throw is stunned for 1 round.",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "ABILITY",
+          "ability": "dex",
+          "value": 13
+        },
+        {
+          "type": "ABILITY",
+          "ability": "wis",
+          "value": 13
+        },
+        {
+          "type": "FEAT",
+          "value": "Improved Unarmed Strike"
+        },
+        {
+          "type": "BAB",
+          "value": 8
+        }
+      ]
+    },
+    "monkBonusFeat1": true
+  }
+}

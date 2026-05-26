@@ -1,0 +1,442 @@
+[
+  {
+    "name": "Padded armor",
+    "category": "Light armor",
+    "cost": "5 gp",
+    "acBonus": 1,
+    "maxDex": 8,
+    "checkPenalty": 0,
+    "spellFailure": "5%",
+    "speed30": "30 ft.",
+    "speed20": "20 ft.",
+    "weight": "10 lb.",
+    "scaledCost": {
+      "Small": "5 gp",
+      "Medium": "5 gp",
+      "Large": "10 gp"
+    },
+    "scaledWeight": {
+      "Small": "5 lb.",
+      "Medium": "10 lb.",
+      "Large": "20 lb."
+    }
+  },
+  {
+    "name": "Leather armor",
+    "category": "Light armor",
+    "cost": "10 gp",
+    "acBonus": 2,
+    "maxDex": 6,
+    "checkPenalty": 0,
+    "spellFailure": "10%",
+    "speed30": "30 ft.",
+    "speed20": "20 ft.",
+    "weight": "15 lb.",
+    "scaledCost": {
+      "Small": "10 gp",
+      "Medium": "10 gp",
+      "Large": "20 gp"
+    },
+    "scaledWeight": {
+      "Small": "7.5 lb.",
+      "Medium": "15 lb.",
+      "Large": "30 lb."
+    }
+  },
+  {
+    "name": "Studded leather armor",
+    "category": "Light armor",
+    "cost": "25 gp",
+    "acBonus": 3,
+    "maxDex": 5,
+    "checkPenalty": -1,
+    "spellFailure": "15%",
+    "speed30": "30 ft.",
+    "speed20": "20 ft.",
+    "weight": "20 lb.",
+    "scaledCost": {
+      "Small": "25 gp",
+      "Medium": "25 gp",
+      "Large": "50 gp"
+    },
+    "scaledWeight": {
+      "Small": "10 lb.",
+      "Medium": "20 lb.",
+      "Large": "40 lb."
+    }
+  },
+  {
+    "name": "Chain shirt",
+    "category": "Light armor",
+    "cost": "100 gp",
+    "acBonus": 4,
+    "maxDex": 4,
+    "checkPenalty": -2,
+    "spellFailure": "20%",
+    "speed30": "30 ft.",
+    "speed20": "20 ft.",
+    "weight": "25 lb.",
+    "scaledCost": {
+      "Small": "100 gp",
+      "Medium": "100 gp",
+      "Large": "200 gp"
+    },
+    "scaledWeight": {
+      "Small": "12.5 lb.",
+      "Medium": "25 lb.",
+      "Large": "50 lb."
+    }
+  },
+  {
+    "name": "Hide armor",
+    "category": "Medium armor",
+    "cost": "15 gp",
+    "acBonus": 3,
+    "maxDex": 4,
+    "checkPenalty": -3,
+    "spellFailure": "20%",
+    "speed30": "20 ft.",
+    "speed20": "15 ft.",
+    "weight": "25 lb.",
+    "scaledCost": {
+      "Small": "15 gp",
+      "Medium": "15 gp",
+      "Large": "30 gp"
+    },
+    "scaledWeight": {
+      "Small": "12.5 lb.",
+      "Medium": "25 lb.",
+      "Large": "50 lb."
+    }
+  },
+  {
+    "name": "Scale mail",
+    "category": "Medium armor",
+    "cost": "50 gp",
+    "acBonus": 4,
+    "maxDex": 3,
+    "checkPenalty": -4,
+    "spellFailure": "25%",
+    "speed30": "20 ft.",
+    "speed20": "15 ft.",
+    "weight": "30 lb.",
+    "scaledCost": {
+      "Small": "50 gp",
+      "Medium": "50 gp",
+      "Large": "100 gp"
+    },
+    "scaledWeight": {
+      "Small": "15 lb.",
+      "Medium": "30 lb.",
+      "Large": "60 lb."
+    }
+  },
+  {
+    "name": "Chainmail",
+    "category": "Medium armor",
+    "cost": "150 gp",
+    "acBonus": 5,
+    "maxDex": 2,
+    "checkPenalty": -5,
+    "spellFailure": "30%",
+    "speed30": "20 ft.",
+    "speed20": "15 ft.",
+    "weight": "40 lb.",
+    "scaledCost": {
+      "Small": "150 gp",
+      "Medium": "150 gp",
+      "Large": "300 gp"
+    },
+    "scaledWeight": {
+      "Small": "20 lb.",
+      "Medium": "40 lb.",
+      "Large": "80 lb."
+    }
+  },
+  {
+    "name": "Breastplate",
+    "category": "Medium armor",
+    "cost": "200 gp",
+    "acBonus": 5,
+    "maxDex": 3,
+    "checkPenalty": -4,
+    "spellFailure": "25%",
+    "speed30": "20 ft.",
+    "speed20": "15 ft.",
+    "weight": "30 lb.",
+    "scaledCost": {
+      "Small": "200 gp",
+      "Medium": "200 gp",
+      "Large": "400 gp"
+    },
+    "scaledWeight": {
+      "Small": "15 lb.",
+      "Medium": "30 lb.",
+      "Large": "60 lb."
+    }
+  },
+  {
+    "name": "Splint mail",
+    "category": "Heavy armor",
+    "cost": "200 gp",
+    "acBonus": 6,
+    "maxDex": 0,
+    "checkPenalty": -7,
+    "spellFailure": "40%",
+    "speed30": "20 ft.2",
+    "speed20": "15 ft.2",
+    "weight": "45 lb.",
+    "scaledCost": {
+      "Small": "200 gp",
+      "Medium": "200 gp",
+      "Large": "400 gp"
+    },
+    "scaledWeight": {
+      "Small": "22.5 lb.",
+      "Medium": "45 lb.",
+      "Large": "90 lb."
+    }
+  },
+  {
+    "name": "Banded mail",
+    "category": "Heavy armor",
+    "cost": "250 gp",
+    "acBonus": 6,
+    "maxDex": 1,
+    "checkPenalty": -6,
+    "spellFailure": "35%",
+    "speed30": "20 ft.2",
+    "speed20": "15 ft.2",
+    "weight": "35 lb.",
+    "scaledCost": {
+      "Small": "250 gp",
+      "Medium": "250 gp",
+      "Large": "500 gp"
+    },
+    "scaledWeight": {
+      "Small": "17.5 lb.",
+      "Medium": "35 lb.",
+      "Large": "70 lb."
+    }
+  },
+  {
+    "name": "Full plate",
+    "category": "Heavy armor",
+    "cost": "1,500 gp",
+    "acBonus": 8,
+    "maxDex": 1,
+    "checkPenalty": -6,
+    "spellFailure": "35%",
+    "speed30": "20 ft.2",
+    "speed20": "15 ft.2",
+    "weight": "50 lb.",
+    "scaledCost": {
+      "Small": "1500 gp",
+      "Medium": "1,500 gp",
+      "Large": "3000 gp"
+    },
+    "scaledWeight": {
+      "Small": "25 lb.",
+      "Medium": "50 lb.",
+      "Large": "100 lb."
+    }
+  },
+  {
+    "name": "Buckler",
+    "category": "Shield",
+    "cost": "15 gp",
+    "acBonus": 1,
+    "maxDex": 99,
+    "checkPenalty": -1,
+    "spellFailure": "5%",
+    "speed30": "—",
+    "speed20": "—",
+    "weight": "5 lb.",
+    "scaledCost": {
+      "Small": "15 gp",
+      "Medium": "15 gp",
+      "Large": "30 gp"
+    },
+    "scaledWeight": {
+      "Small": "2.5 lb.",
+      "Medium": "5 lb.",
+      "Large": "10 lb."
+    }
+  },
+  {
+    "name": "Light wooden shield",
+    "category": "Shield",
+    "cost": "3 gp",
+    "acBonus": 1,
+    "maxDex": 99,
+    "checkPenalty": -1,
+    "spellFailure": "5%",
+    "speed30": "—",
+    "speed20": "—",
+    "weight": "5 lb.",
+    "scaledCost": {
+      "Small": "3 gp",
+      "Medium": "3 gp",
+      "Large": "6 gp"
+    },
+    "scaledWeight": {
+      "Small": "2.5 lb.",
+      "Medium": "5 lb.",
+      "Large": "10 lb."
+    }
+  },
+  {
+    "name": "Light steel shield",
+    "category": "Shield",
+    "cost": "9 gp",
+    "acBonus": 1,
+    "maxDex": 99,
+    "checkPenalty": -1,
+    "spellFailure": "5%",
+    "speed30": "—",
+    "speed20": "—",
+    "weight": "6 lb.",
+    "scaledCost": {
+      "Small": "9 gp",
+      "Medium": "9 gp",
+      "Large": "18 gp"
+    },
+    "scaledWeight": {
+      "Small": "3 lb.",
+      "Medium": "6 lb.",
+      "Large": "12 lb."
+    }
+  },
+  {
+    "name": "Heavy wooden shield",
+    "category": "Shield",
+    "cost": "7 gp",
+    "acBonus": 2,
+    "maxDex": 99,
+    "checkPenalty": -2,
+    "spellFailure": "15%",
+    "speed30": "—",
+    "speed20": "—",
+    "weight": "10 lb.",
+    "scaledCost": {
+      "Small": "7 gp",
+      "Medium": "7 gp",
+      "Large": "14 gp"
+    },
+    "scaledWeight": {
+      "Small": "5 lb.",
+      "Medium": "10 lb.",
+      "Large": "20 lb."
+    }
+  },
+  {
+    "name": "Heavy steel shield",
+    "category": "Shield",
+    "cost": "20 gp",
+    "acBonus": 2,
+    "maxDex": 99,
+    "checkPenalty": -2,
+    "spellFailure": "15%",
+    "speed30": "—",
+    "speed20": "—",
+    "weight": "15 lb.",
+    "scaledCost": {
+      "Small": "20 gp",
+      "Medium": "20 gp",
+      "Large": "40 gp"
+    },
+    "scaledWeight": {
+      "Small": "7.5 lb.",
+      "Medium": "15 lb.",
+      "Large": "30 lb."
+    }
+  },
+  {
+    "name": "Tower shield",
+    "category": "Shield",
+    "cost": "30 gp",
+    "acBonus": 4,
+    "maxDex": 2,
+    "checkPenalty": -10,
+    "spellFailure": "50%",
+    "speed30": "—",
+    "speed20": "—",
+    "weight": "45 lb.",
+    "scaledCost": {
+      "Small": "30 gp",
+      "Medium": "30 gp",
+      "Large": "60 gp"
+    },
+    "scaledWeight": {
+      "Small": "22.5 lb.",
+      "Medium": "45 lb.",
+      "Large": "90 lb."
+    }
+  },
+  {
+    "name": "Armor spikes",
+    "category": "Extra",
+    "cost": "+50 gp",
+    "acBonus": 0,
+    "maxDex": 99,
+    "checkPenalty": 0,
+    "spellFailure": "—",
+    "speed30": "—",
+    "speed20": "—",
+    "weight": "+10 lb.",
+    "scaledCost": {
+      "Small": "50 gp",
+      "Medium": "+50 gp",
+      "Large": "100 gp"
+    },
+    "scaledWeight": {
+      "Small": "5 lb.",
+      "Medium": "+10 lb.",
+      "Large": "20 lb."
+    }
+  },
+  {
+    "name": "Gauntlet, locked",
+    "category": "Extra",
+    "cost": "8 gp",
+    "acBonus": 0,
+    "maxDex": 99,
+    "checkPenalty": null,
+    "spellFailure": "—4",
+    "speed30": "—",
+    "speed20": "—",
+    "weight": "+5 lb.",
+    "scaledCost": {
+      "Small": "8 gp",
+      "Medium": "8 gp",
+      "Large": "16 gp"
+    },
+    "scaledWeight": {
+      "Small": "2.5 lb.",
+      "Medium": "+5 lb.",
+      "Large": "10 lb."
+    }
+  },
+  {
+    "name": "Shield spikes",
+    "category": "Extra",
+    "cost": "+10 gp",
+    "acBonus": 0,
+    "maxDex": 99,
+    "checkPenalty": 0,
+    "spellFailure": "—",
+    "speed30": "—",
+    "speed20": "—",
+    "weight": "+5 lb.",
+    "scaledCost": {
+      "Small": "10 gp",
+      "Medium": "+10 gp",
+      "Large": "20 gp"
+    },
+    "scaledWeight": {
+      "Small": "2.5 lb.",
+      "Medium": "+5 lb.",
+      "Large": "10 lb."
+    }
+  }
+]
