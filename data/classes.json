@@ -2287,6 +2287,269 @@
     ],
     "armorProficiencies": []
   },
+  "Ranger": {
+    "name": "Ranger",
+    "source": "SRD",
+    "alignment": "Any",
+    "hitDie": 8,
+    "babProgression": "good",
+    "saves": {
+      "fort": "good",
+      "ref": "good",
+      "will": "poor"
+    },
+    "skillPoints": 6,
+    "classSkills": [
+      "Climb",
+      "Concentration",
+      "Craft",
+      "Handle Animal",
+      "Heal",
+      "Hide",
+      "Jump",
+      "Knowledge (Dungeoneering)",
+      "Knowledge (Geography)",
+      "Knowledge (Nature)",
+      "Listen",
+      "Move Silently",
+      "Profession",
+      "Ride",
+      "Search",
+      "Spot",
+      "Survival",
+      "Swim",
+      "Use Rope"
+    ],
+    "favoredEnemyOptions": [
+      "Aberration",
+      "Animal",
+      "Construct",
+      "Dragon",
+      "Elemental",
+      "Fey",
+      "Giant",
+      "Humanoid (aquatic)",
+      "Humanoid (dwarf)",
+      "Humanoid (elf)",
+      "Humanoid (goblinoid)",
+      "Humanoid (gnoll)",
+      "Humanoid (gnome)",
+      "Humanoid (halfling)",
+      "Humanoid (human)",
+      "Humanoid (orc)",
+      "Humanoid (reptilian)",
+      "Magical beast",
+      "Monstrous Humanoid",
+      "Ooze",
+      "Outsider (air)",
+      "Outsider (chaotic)",
+      "Outsider (earth)",
+      "Outsider (evil)",
+      "Outsider (fire)",
+      "Outsider (good)",
+      "Outsider (lawful)",
+      "Outsider (native)",
+      "Outsider (water)",
+      "Plant",
+      "Undead",
+      "Vermin"
+    ],
+    "features": {
+      "1": [
+        {
+          "name": "Track",
+          "description": "A ranger gains Track as a bonus feat.",
+          "abilityType": "Feat",
+          "showOnSheet": true,
+          "showOnBlock": false,
+          "isSpecialAttack": false,
+          "isSpecialQuality": false
+        },
+        {
+          "name": "Wild empathy",
+          "description": "A ranger can improve the attitude of an animal, or a magical beast with Intelligence 1 or 2 at a -4 penalty.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "3": [
+        {
+          "name": "Endurance",
+          "description": "A ranger gains Endurance as a bonus feat.",
+          "abilityType": "Feat",
+          "showOnSheet": true,
+          "showOnBlock": false,
+          "isSpecialAttack": false,
+          "isSpecialQuality": false
+        }
+      ],
+      "4": [
+        {
+          "name": "Animal companion",
+          "description": "A ranger gains an animal companion as a druid of one-half his ranger level.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "7": [
+        {
+          "name": "Woodland stride",
+          "description": "Move through natural undergrowth at normal speed without damage or impairment.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "8": [
+        {
+          "name": "Swift tracker",
+          "description": "Track at normal speed without the usual -5 penalty, or at up to twice normal speed with only a -10 penalty.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "9": [
+        {
+          "name": "Evasion",
+          "description": "On a successful Reflex save against an attack that normally deals half damage, take no damage while wearing light or no armor.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "13": [
+        {
+          "name": "Camouflage",
+          "description": "Use the Hide skill in any sort of natural terrain, even without cover or concealment.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "17": [
+        {
+          "name": "Hide in plain sight",
+          "description": "Use the Hide skill in natural terrain even while being observed.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ]
+    },
+    "spellcastingType": "prepared",
+    "spellSlotStart": 1,
+    "spellSlotStat": "wis",
+    "spellSaveDCStat": "wis",
+    "spellSlots": {
+      "4": [
+        0
+      ],
+      "5": [
+        0
+      ],
+      "6": [
+        1
+      ],
+      "7": [
+        1
+      ],
+      "8": [
+        1,
+        0
+      ],
+      "9": [
+        1,
+        0
+      ],
+      "10": [
+        1,
+        1
+      ],
+      "11": [
+        1,
+        1,
+        0
+      ],
+      "12": [
+        1,
+        1,
+        1
+      ],
+      "13": [
+        1,
+        1,
+        1
+      ],
+      "14": [
+        2,
+        1,
+        1,
+        0
+      ],
+      "15": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "16": [
+        2,
+        2,
+        1,
+        1
+      ],
+      "17": [
+        2,
+        2,
+        2,
+        1
+      ],
+      "18": [
+        3,
+        2,
+        2,
+        1
+      ],
+      "19": [
+        3,
+        3,
+        3,
+        2
+      ],
+      "20": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    "startingGold": 240,
+    "weaponProficiencies": [
+      "simple",
+      "martial"
+    ],
+    "armorProficiencies": [
+      "light",
+      "shield"
+    ]
+  },
   "Paladin": {
     "source": "SRD",
     "alignment": "Lawful good",

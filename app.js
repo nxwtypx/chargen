@@ -37,11 +37,14 @@ new Vue({
       knownSpells: {},
       skillAllocations: [],
       domains: ['', ''],
-      turnUndeadChoice: ''
+      turnUndeadChoice: '',
+      rangerCombatStyle: '',
+      rangerFavoredEnemies: []
     },
     ui: {
       showSpells: false,
       showFeatures: true,
+      showRangerChoices: false,
       shopTab: 'Weapons',
       shopSearch: '',
       shopCategory: ''
@@ -329,6 +332,41 @@ new Vue({
         });
       }
 
+      // Add Ranger choices
+      let rangerLevels = classLevels['Ranger'] || 0;
+      if (rangerLevels > 0) {
+        let favoredEnemies = this.rangerFavoredEnemyBonuses;
+        let favoredText = favoredEnemies.length > 0
+          ? favoredEnemies.map(fe => `${fe.enemy} +${fe.bonus}`).join(', ')
+          : 'choice pending';
+        featuresMap.set('Favored enemy', {
+          name: 'Favored enemy',
+          description: `Bonuses apply on Bluff, Listen, Sense Motive, Spot, Survival, and weapon damage rolls against selected enemies: ${favoredText}.`,
+          abilityType: 'Ex',
+          showOnSheet: true,
+          showOnBlock: true,
+          isSpecialAttack: true,
+          isSpecialQuality: false
+        });
+
+        if (rangerLevels >= 2) {
+          let style = this.character.rangerCombatStyle || '';
+          let styleFeat = this.getRangerCombatStyleFeat(rangerLevels);
+          let styleText = style
+            ? `${this.formatRangerCombatStyle(style)} (${styleFeat})`
+            : 'choice pending';
+          featuresMap.set('Combat style', {
+            name: 'Combat style',
+            description: `${styleText}. These benefits apply only in light or no armor.`,
+            abilityType: 'Ex',
+            showOnSheet: true,
+            showOnBlock: true,
+            isSpecialAttack: false,
+            isSpecialQuality: true
+          });
+        }
+      }
+
       let allFeatures = Array.from(featuresMap.values());
       
       let totalLevel = this.character.levels.length;
@@ -422,7 +460,7 @@ new Vue({
       let casters = [];
       activeClasses.forEach(c => {
          let clsData = this.rules.classes[c];
-         if (clsData && clsData.spellSlots && !clsData.spellsKnown) casters.push(c);
+         if (clsData && clsData.spellSlots && !clsData.spellsKnown && this.classSlots(c).length > 0) casters.push(c);
       });
       return casters;
     },
@@ -436,12 +474,36 @@ new Vue({
       let casters = [];
       activeClasses.forEach(c => {
          let clsData = this.rules.classes[c];
-         if (clsData && clsData.spellsKnown) casters.push(c);
+         if (clsData && clsData.spellsKnown && this.classKnownSlots(c).length > 0) casters.push(c);
       });
       return casters;
     },
     spellcastingClasses() {
       return [...new Set([...this.preparedCasters, ...this.spontaneousCasters])];
+    },
+    hasRangerLevel() {
+      return this.classLevel('Ranger') > 0;
+    },
+    rangerFavoredEnemySlots() {
+      let rangerLevel = this.classLevel('Ranger');
+      return [1, 5, 10, 15, 20].filter(level => rangerLevel >= level);
+    },
+    rangerFavoredEnemyOptions() {
+      let clsData = this.rules.classes ? this.rules.classes['Ranger'] : null;
+      return clsData && clsData.favoredEnemyOptions ? clsData.favoredEnemyOptions : [];
+    },
+    rangerFavoredEnemyBonuses() {
+      let bonuses = {};
+      this.rangerFavoredEnemySlots.forEach((slotLevel, idx) => {
+        let choice = this.character.rangerFavoredEnemies[idx] || {};
+        if (choice.enemy) {
+          bonuses[choice.enemy] = (bonuses[choice.enemy] || 0) + 2;
+        }
+        if (idx > 0 && choice.increase) {
+          bonuses[choice.increase] = (bonuses[choice.increase] || 0) + 2;
+        }
+      });
+      return Object.keys(bonuses).sort().map(enemy => ({ enemy, bonus: bonuses[enemy] }));
     },
     skillPools() {
       if (!this.rules.classes || Object.keys(this.rules.classes).length === 0) return [];
@@ -532,6 +594,7 @@ new Vue({
         this.syncPreparedSpellArrays();
         this.syncKnownSpellClasses();
         this.syncKnownSpellArrays();
+        this.syncRangerChoices();
       },
       deep: true,
       immediate: true
@@ -557,6 +620,67 @@ new Vue({
     }
   },
   methods: {
+    syncRangerChoices() {
+      if (!this.character.rangerFavoredEnemies) {
+        this.$set(this.character, 'rangerFavoredEnemies', []);
+      }
+
+      let slots = this.rangerFavoredEnemySlots;
+      while (this.character.rangerFavoredEnemies.length < slots.length) {
+        this.character.rangerFavoredEnemies.push({ enemy: '', increase: '' });
+      }
+      while (this.character.rangerFavoredEnemies.length > slots.length) {
+        this.character.rangerFavoredEnemies.pop();
+      }
+
+      this.character.rangerFavoredEnemies.forEach((choice, idx) => {
+        if (!choice) {
+          this.$set(this.character.rangerFavoredEnemies, idx, { enemy: '', increase: '' });
+          return;
+        }
+        if (typeof choice.enemy === 'undefined') this.$set(choice, 'enemy', '');
+        if (typeof choice.increase === 'undefined') this.$set(choice, 'increase', '');
+        if (idx === 0 && choice.increase) choice.increase = '';
+        if (choice.enemy && !this.rangerFavoredEnemyOptions.includes(choice.enemy)) choice.enemy = '';
+        if (choice.increase && !this.getRangerFavoredEnemyIncreaseOptions(idx).includes(choice.increase)) {
+          choice.increase = '';
+        }
+      });
+
+      if (this.classLevel('Ranger') < 2 && this.character.rangerCombatStyle) {
+        this.character.rangerCombatStyle = '';
+      }
+    },
+    getRangerFavoredEnemyIncreaseOptions(slotIndex) {
+      let options = [];
+      for (let i = 0; i <= slotIndex; i++) {
+        let choice = this.character.rangerFavoredEnemies[i];
+        if (choice && choice.enemy && !options.includes(choice.enemy)) {
+          options.push(choice.enemy);
+        }
+      }
+      return options.sort();
+    },
+    formatRangerCombatStyle(style) {
+      if (style === 'archery') return 'Archery';
+      if (style === 'twoWeapon') return 'Two-Weapon Combat';
+      return '';
+    },
+    getRangerCombatStyleFeat(rangerLevel) {
+      let style = this.character.rangerCombatStyle;
+      if (!style) return 'choice pending';
+      if (style === 'archery') {
+        if (rangerLevel >= 11) return 'Improved Precise Shot';
+        if (rangerLevel >= 6) return 'Manyshot';
+        return 'Rapid Shot';
+      }
+      if (style === 'twoWeapon') {
+        if (rangerLevel >= 11) return 'Greater Two-Weapon Fighting';
+        if (rangerLevel >= 6) return 'Improved Two-Weapon Fighting';
+        return 'Two-Weapon Fighting';
+      }
+      return 'choice pending';
+    },
     syncPreparedSpellClasses() {
       if (!this.rules.classes || Object.keys(this.rules.classes).length === 0) return;
       let activeClasses = new Set();
@@ -698,6 +822,7 @@ new Vue({
       let rules = this.rules.classes[className];
       if (!rules || !rules.spellSlots) return [];
       let base = rules.spellSlots[lvl] || [];
+      let spellSlotStart = rules.spellSlotStart || 0;
       
       let castingStat = rules.spellSlotStat || 'wis'; // Default to wisdom if undefined
       let score = this.getTotalAbility(castingStat);
@@ -705,21 +830,22 @@ new Vue({
       
       let slots = [];
       for (let l = 0; l < base.length; l++) {
+        let spellLevel = l + spellSlotStart;
         let baseCount = base[l];
-        let canCast = score >= (10 + l);
+        let canCast = score >= (10 + spellLevel);
         let bonus = 0;
-        if (canCast && l > 0 && mod >= l) {
-          bonus = Math.floor((mod - l) / 4) + 1;
+        if (canCast && spellLevel > 0 && mod >= spellLevel) {
+          bonus = Math.floor((mod - spellLevel) / 4) + 1;
         }
         slots.push({
-          level: l,
+          level: spellLevel,
           base: baseCount,
           bonus: bonus,
           total: canCast ? (baseCount + bonus) : 0,
           canCast: canCast,
-          requiredScore: 10 + l,
+          requiredScore: 10 + spellLevel,
           statName: castingStat,
-          hasDomainSlot: (rules.hasDomainSlots && l > 0 && canCast)
+          hasDomainSlot: (rules.hasDomainSlots && spellLevel > 0 && canCast)
         });
       }
       return slots;
@@ -1028,6 +1154,9 @@ new Vue({
         this.$set(this.rules, 'domains', domains);
         this.syncPreparedSpellClasses();
         this.syncPreparedSpellArrays();
+        this.syncKnownSpellClasses();
+        this.syncKnownSpellArrays();
+        this.syncRangerChoices();
       } catch (e) {
         console.error("Failed to load rules data:", e);
       }

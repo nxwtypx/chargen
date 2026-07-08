@@ -227,6 +227,49 @@
           </div>
         </div>
 
+        <div class="foldout" v-if="hasRangerLevel">
+          <div class="foldout-header" @click="ui.showRangerChoices = !ui.showRangerChoices">
+            <span>Ranger Choices</span>
+            <span>{{ ui.showRangerChoices ? '▼' : '▶' }}</span>
+          </div>
+          <div class="foldout-content" v-show="ui.showRangerChoices">
+            <div v-if="classLevel('Ranger') >= 2" style="margin-bottom: 15px;">
+              <label style="display: block; font-size: 0.9em; margin-bottom: 3px; font-weight: bold; color: var(--accent-color);">Combat Style</label>
+              <select v-model="character.rangerCombatStyle" style="width: 100%; max-width: 360px;">
+                <option value="">-- Choose Combat Style --</option>
+                <option value="archery">Archery</option>
+                <option value="twoWeapon">Two-Weapon Combat</option>
+              </select>
+              <div v-if="character.rangerCombatStyle" style="margin-top: 6px; color: var(--text-secondary); font-size: 0.9em;">
+                Current benefit: {{ getRangerCombatStyleFeat(classLevel('Ranger')) }}
+              </div>
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 0.9em; margin-bottom: 8px; font-weight: bold; color: var(--accent-color);">Favored Enemies</label>
+              <div v-for="(slotLevel, idx) in rangerFavoredEnemySlots" v-if="character.rangerFavoredEnemies[idx]" :key="'ranger_fe_'+slotLevel" style="display: grid; grid-template-columns: 120px minmax(180px, 1fr) minmax(180px, 1fr); gap: 10px; align-items: center; margin-bottom: 10px;">
+                <div style="color: var(--text-secondary);">Level {{ slotLevel }}</div>
+                <select v-model="character.rangerFavoredEnemies[idx].enemy" style="width: 100%;">
+                  <option value="">-- Select Enemy --</option>
+                  <option v-for="enemy in rangerFavoredEnemyOptions" :key="'enemy_'+idx+'_'+enemy" :value="enemy">{{ enemy }}</option>
+                </select>
+                <select v-if="idx > 0" v-model="character.rangerFavoredEnemies[idx].increase" style="width: 100%;">
+                  <option value="">-- Increase Bonus --</option>
+                  <option v-for="enemy in getRangerFavoredEnemyIncreaseOptions(idx)" :key="'inc_'+idx+'_'+enemy" :value="enemy">{{ enemy }}</option>
+                </select>
+                <div v-else style="color: var(--text-secondary); font-size: 0.9em;">Initial +2 bonus</div>
+              </div>
+
+              <div v-if="rangerFavoredEnemyBonuses.length > 0" style="margin-top: 10px; color: var(--text-secondary); font-size: 0.9em;">
+                Current bonuses:
+                <span v-for="(favored, idx) in rangerFavoredEnemyBonuses" :key="'bonus_'+favored.enemy">
+                  {{ idx > 0 ? ', ' : '' }}{{ favored.enemy }} +{{ favored.bonus }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="foldout" v-for="className in spellcastingClasses" :key="className">
           <div class="foldout-header" @click="ui.showSpells = !ui.showSpells">
             <span>Spells ({{ className }})</span>
