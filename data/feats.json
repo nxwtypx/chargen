@@ -871,6 +871,21 @@
       ]
     }
   },
+  "Spell Mastery": {
+    "name": "Spell Mastery",
+    "description": "Each time you take this feat, choose a number of spells that you already know equal to your Intelligence modifier. You can prepare those spells without referring to a spellbook.",
+    "type": "Special",
+    "prerequisites": {
+      "logic": "AND",
+      "conditions": [
+        {
+          "type": "CLASS_LEVEL",
+          "className": "Wizard",
+          "value": 1
+        }
+      ]
+    }
+  },
   "Acrobatic": {
     "name": "Acrobatic",
     "description": "You get a +2 bonus on all Jump checks and Tumble checks.",

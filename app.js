@@ -39,12 +39,18 @@ new Vue({
       domains: ['', ''],
       turnUndeadChoice: '',
       rangerCombatStyle: '',
-      rangerFavoredEnemies: []
+      rangerFavoredEnemies: [],
+      wizardSpecialization: '',
+      wizardProhibitedSchools: [],
+      wizardSpellbookSelections: [],
+      wizardPurchasedSpells: [],
+      wizardSpellMastery: []
     },
     ui: {
       showSpells: false,
       showFeatures: true,
       showRangerChoices: false,
+      showWizardChoices: false,
       shopTab: 'Weapons',
       shopSearch: '',
       shopCategory: ''
@@ -152,6 +158,7 @@ new Vue({
       this.character.armor.forEach(a => {
         total += this.parseCost(a.cost);
       });
+      total += this.wizardSpellbookCost || 0;
       return total;
     },
     remainingBudget() {
@@ -368,6 +375,20 @@ new Vue({
         }
       }
 
+      let wizardLevels = classLevels['Wizard'] || 0;
+      if (wizardLevels > 0 && this.character.wizardSpecialization) {
+        let prohibited = (this.character.wizardProhibitedSchools || []).filter(s => s);
+        featuresMap.set('School specialization', {
+          name: `${this.wizardSpecialistName} specialization`,
+          description: `Specialized in ${this.character.wizardSpecialization}; prohibited schools: ${prohibited.length ? prohibited.join(', ') : 'choice pending'}. Gains one additional specialty-school spell slot per spell level.`,
+          abilityType: '',
+          showOnSheet: true,
+          showOnBlock: true,
+          isSpecialAttack: false,
+          isSpecialQuality: true
+        });
+      }
+
       let allFeatures = Array.from(featuresMap.values());
       
       let totalLevel = this.character.levels.length;
@@ -461,7 +482,7 @@ new Vue({
       let casters = [];
       activeClasses.forEach(c => {
          let clsData = this.rules.classes[c];
-         if (clsData && clsData.spellSlots && !clsData.spellsKnown && this.classSlots(c).length > 0) casters.push(c);
+         if (clsData && clsData.spellSlots && clsData.castingType !== 'spontaneous' && this.classSlots(c).length > 0) casters.push(c);
       });
       return casters;
     },
@@ -475,7 +496,7 @@ new Vue({
       let casters = [];
       activeClasses.forEach(c => {
          let clsData = this.rules.classes[c];
-         if (clsData && clsData.spellsKnown && this.classKnownSlots(c).length > 0) casters.push(c);
+         if (clsData && clsData.castingType === 'spontaneous' && clsData.spellsKnown && this.classKnownSlots(c).length > 0) casters.push(c);
       });
       return casters;
     },
@@ -484,6 +505,60 @@ new Vue({
     },
     hasRangerLevel() {
       return this.classLevel('Ranger') > 0;
+    },
+    hasWizardLevel() {
+      return this.classLevel('Wizard') > 0;
+    },
+    wizardSpecialistName() {
+      let names = {
+        Abjuration: 'Abjurer',
+        Conjuration: 'Conjurer',
+        Divination: 'Diviner',
+        Enchantment: 'Enchanter',
+        Evocation: 'Evoker',
+        Illusion: 'Illusionist',
+        Necromancy: 'Necromancer',
+        Transmutation: 'Transmuter'
+      };
+      return names[this.character.wizardSpecialization] || 'Wizard';
+    },
+    wizardRequiredProhibitedSchoolCount() {
+      if (!this.character.wizardSpecialization) return 0;
+      return this.character.wizardSpecialization === 'Divination' ? 1 : 2;
+    },
+    wizardProhibitedSchoolOptions() {
+      return this.schoolList.filter(s => s !== 'Divination' && s !== this.character.wizardSpecialization);
+    },
+    wizardSpellbookSlots() {
+      let wizardLevel = this.classLevel('Wizard');
+      if (wizardLevel <= 0) return [];
+
+      let slots = [];
+      let intBonus = Math.max(0, this.getAbilityMod('int'));
+      slots.push({ source: 'Level 1 spellbook', level: 1, maxSpellLevel: 1, total: 3 + intBonus });
+
+      for (let lvl = 2; lvl <= wizardLevel; lvl++) {
+        slots.push({
+          source: `Wizard level ${lvl}`,
+          level: lvl,
+          maxSpellLevel: this.getWizardMaxSpellLevelForClassLevel(lvl),
+          total: 2
+        });
+      }
+
+      return slots;
+    },
+    wizardMaxSpellLevel() {
+      return this.getWizardMaxSpellLevelForClassLevel(this.classLevel('Wizard'));
+    },
+    wizardSpellMasterySlots() {
+      return Math.max(0, this.getAbilityMod('int')) * this.getFeatCount('Spell Mastery');
+    },
+    wizardSpellbookCost() {
+      return (this.character.wizardPurchasedSpells || []).reduce((total, entry) => {
+        if (!entry || !entry.spell) return total;
+        return total + this.getWizardPurchasedSpellCost(entry.spell);
+      }, 0);
     },
     rangerFavoredEnemySlots() {
       let rangerLevel = this.classLevel('Ranger');
@@ -596,6 +671,7 @@ new Vue({
         this.syncKnownSpellClasses();
         this.syncKnownSpellArrays();
         this.syncRangerChoices();
+        this.syncWizardChoices();
       },
       deep: true,
       immediate: true
@@ -604,6 +680,20 @@ new Vue({
       handler() {
         this.syncPreparedSpellArrays();
         this.syncKnownSpellArrays();
+        this.syncWizardChoices();
+      },
+      deep: true
+    },
+    'character.wizardSpecialization': {
+      handler() {
+        this.syncPreparedSpellArrays();
+        this.syncWizardChoices();
+      }
+    },
+    'character.wizardProhibitedSchools': {
+      handler() {
+        this.syncPreparedSpellArrays();
+        this.syncWizardChoices();
       },
       deep: true
     },
@@ -621,6 +711,21 @@ new Vue({
     }
   },
   methods: {
+    getClassDisplayName(className) {
+      if (className === 'Wizard' && this.character.wizardSpecialization) {
+        return this.wizardSpecialistName;
+      }
+      return className;
+    },
+    isFeatAllowedForBonusTag(featName, tag) {
+      if (tag === 'humanBonusFeat') return true;
+      let feat = this.rules.feats[featName];
+      if (!feat) return false;
+      if (tag === 'wizardBonusFeat') {
+        return feat.type === 'Metamagic' || feat.type === 'Item Creation' || featName === 'Spell Mastery';
+      }
+      return !!feat[tag];
+    },
     syncRangerChoices() {
       if (!this.character.rangerFavoredEnemies) {
         this.$set(this.character, 'rangerFavoredEnemies', []);
@@ -682,6 +787,217 @@ new Vue({
       }
       return 'choice pending';
     },
+    syncWizardChoices() {
+      if (!this.character.wizardProhibitedSchools) this.$set(this.character, 'wizardProhibitedSchools', []);
+      if (!this.character.wizardSpellbookSelections) this.$set(this.character, 'wizardSpellbookSelections', []);
+      if (!this.character.wizardPurchasedSpells) this.$set(this.character, 'wizardPurchasedSpells', []);
+      if (!this.character.wizardSpellMastery) this.$set(this.character, 'wizardSpellMastery', []);
+
+      if (!this.hasWizardLevel) {
+        if (this.character.wizardSpecialization) this.character.wizardSpecialization = '';
+        this.character.wizardProhibitedSchools.splice(0);
+        this.character.wizardSpellbookSelections.splice(0);
+        this.character.wizardPurchasedSpells.splice(0);
+        this.character.wizardSpellMastery.splice(0);
+        return;
+      }
+
+      if (this.character.wizardSpecialization && !this.schoolList.includes(this.character.wizardSpecialization)) {
+        this.character.wizardSpecialization = '';
+      }
+
+      let required = this.wizardRequiredProhibitedSchoolCount;
+      while (this.character.wizardProhibitedSchools.length < required) this.character.wizardProhibitedSchools.push('');
+      while (this.character.wizardProhibitedSchools.length > required) this.character.wizardProhibitedSchools.pop();
+      this.character.wizardProhibitedSchools.forEach((school, idx) => {
+        if (school && !this.wizardProhibitedSchoolOptions.includes(school)) {
+          this.$set(this.character.wizardProhibitedSchools, idx, '');
+        }
+      });
+
+      let slots = this.wizardSpellbookSlots;
+      while (this.character.wizardSpellbookSelections.length < slots.length) {
+        this.character.wizardSpellbookSelections.push([]);
+      }
+      while (this.character.wizardSpellbookSelections.length > slots.length) {
+        this.character.wizardSpellbookSelections.pop();
+      }
+      this.character.wizardSpellbookSelections.forEach((slotSpells, idx) => {
+        if (!Array.isArray(slotSpells)) {
+          this.$set(this.character.wizardSpellbookSelections, idx, []);
+          slotSpells = this.character.wizardSpellbookSelections[idx];
+        }
+        while (slotSpells.length < slots[idx].total) slotSpells.push('');
+        while (slotSpells.length > slots[idx].total) slotSpells.pop();
+        slotSpells.forEach((spell, spellIdx) => {
+          if (spell && !this.getWizardSpellOptionsForSpellbookSlot(slots[idx].maxSpellLevel, idx, spellIdx).includes(spell)) {
+            this.$set(slotSpells, spellIdx, '');
+          }
+        });
+      });
+
+      this.character.wizardPurchasedSpells.forEach((entry, idx) => {
+        if (entry && entry.spell && !this.getWizardSpellOptionsForPurchasedSpell(idx).includes(entry.spell)) entry.spell = '';
+      });
+
+      while (this.character.wizardSpellMastery.length < this.wizardSpellMasterySlots) this.character.wizardSpellMastery.push('');
+      while (this.character.wizardSpellMastery.length > this.wizardSpellMasterySlots) this.character.wizardSpellMastery.pop();
+      let masteryOptions = this.getWizardKnownSpellNames();
+      this.character.wizardSpellMastery.forEach((spell, idx) => {
+        if (spell && !masteryOptions.includes(spell)) this.$set(this.character.wizardSpellMastery, idx, '');
+      });
+    },
+    getWizardMaxSpellLevelForClassLevel(wizardLevel) {
+      let clsData = this.rules.classes['Wizard'];
+      if (!clsData || !clsData.spellSlots) return 0;
+      let slots = clsData.spellSlots[wizardLevel] || [];
+      let maxLevel = 0;
+      slots.forEach((count, idx) => {
+        if (count > 0) maxLevel = idx;
+      });
+      return maxLevel;
+    },
+    getWizardSpellOptions(maxSpellLevel) {
+      let spells = [];
+      let allWizardSpells = this.classSpells('Wizard');
+      for (let level = 0; level <= maxSpellLevel; level++) {
+        (allWizardSpells[level] || []).forEach(spell => spells.push(spell));
+      }
+      return spells.sort();
+    },
+    getWizardSpellOptionsForSpellbookSlot(maxSpellLevel, slotIndex, spellIndex) {
+      let current = this.character.wizardSpellbookSelections
+        && this.character.wizardSpellbookSelections[slotIndex]
+        ? this.character.wizardSpellbookSelections[slotIndex][spellIndex]
+        : '';
+      return this.getWizardSpellOptions(maxSpellLevel).filter(spell => {
+        return spell === current || !this.isWizardSpellAlreadyKnownElsewhere(spell, { type: 'spellbook', slotIndex, spellIndex });
+      });
+    },
+    getWizardSpellOptionsForPurchasedSpell(purchaseIndex) {
+      let currentEntry = this.character.wizardPurchasedSpells ? this.character.wizardPurchasedSpells[purchaseIndex] : null;
+      let current = currentEntry ? currentEntry.spell : '';
+      return this.getWizardSpellOptions(this.wizardMaxSpellLevel).filter(spell => {
+        return spell === current || !this.isWizardSpellAlreadyKnownElsewhere(spell, { type: 'purchase', purchaseIndex });
+      });
+    },
+    isWizardSpellAlreadyKnownElsewhere(spellName, currentSlot) {
+      if (!spellName) return false;
+      if (this.getWizardAutomaticZeroSpells().includes(spellName)) return true;
+
+      let selections = this.character.wizardSpellbookSelections || [];
+      for (let slotIndex = 0; slotIndex < selections.length; slotIndex++) {
+        let slotSpells = selections[slotIndex] || [];
+        for (let spellIndex = 0; spellIndex < slotSpells.length; spellIndex++) {
+          if (currentSlot && currentSlot.type === 'spellbook' && currentSlot.slotIndex === slotIndex && currentSlot.spellIndex === spellIndex) continue;
+          if (slotSpells[spellIndex] === spellName) return true;
+        }
+      }
+
+      let purchases = this.character.wizardPurchasedSpells || [];
+      for (let purchaseIndex = 0; purchaseIndex < purchases.length; purchaseIndex++) {
+        if (currentSlot && currentSlot.type === 'purchase' && currentSlot.purchaseIndex === purchaseIndex) continue;
+        if (purchases[purchaseIndex] && purchases[purchaseIndex].spell === spellName) return true;
+      }
+
+      return false;
+    },
+    getWizardSpellOptionGroups(maxSpellLevel, spellOptions) {
+      let options = [];
+      let allWizardSpells = this.classSpells('Wizard');
+      let allowed = spellOptions ? new Set(spellOptions) : null;
+      for (let level = 0; level <= maxSpellLevel; level++) {
+        let spells = (allWizardSpells[level] || []).filter(spell => !allowed || allowed.has(spell));
+        if (spells.length === 0) continue;
+        options.push({
+          type: 'label',
+          value: `level_${level}`,
+          label: this.formatSpellLevelLabel(level)
+        });
+        spells.forEach(spell => {
+          options.push({
+            type: 'spell',
+            value: spell,
+            label: spell,
+            cost: this.getWizardPurchasedSpellCost(spell)
+          });
+        });
+      }
+      return options;
+    },
+    formatSpellLevelLabel(level) {
+      if (level === 0) return '0th Level';
+      if (level === 1) return '1st Level';
+      if (level === 2) return '2nd Level';
+      if (level === 3) return '3rd Level';
+      return `${level}th Level`;
+    },
+    getWizardKnownSpellsByLevel() {
+      let known = {};
+      this.getWizardAutomaticZeroSpells().forEach(spell => {
+        if (!known[0]) known[0] = [];
+        if (!known[0].includes(spell)) known[0].push(spell);
+      });
+
+      (this.character.wizardSpellbookSelections || []).forEach(slotSpells => {
+        (slotSpells || []).forEach(spell => {
+          let level = this.getSpellLevelForClass(spell, 'Wizard');
+          if (level < 0) return;
+          if (!known[level]) known[level] = [];
+          if (!known[level].includes(spell)) known[level].push(spell);
+        });
+      });
+
+      (this.character.wizardPurchasedSpells || []).forEach(entry => {
+        if (!entry || !entry.spell) return;
+        let level = this.getSpellLevelForClass(entry.spell, 'Wizard');
+        if (level < 0) return;
+        if (!known[level]) known[level] = [];
+        if (!known[level].includes(entry.spell)) known[level].push(entry.spell);
+      });
+
+      Object.keys(known).forEach(level => known[level].sort());
+      return known;
+    },
+    getWizardKnownSpellNames() {
+      let byLevel = this.getWizardKnownSpellsByLevel();
+      return Object.keys(byLevel).sort((a, b) => Number(a) - Number(b)).flatMap(level => byLevel[level]);
+    },
+    getWizardAutomaticZeroSpells() {
+      return [
+        'Resistance',
+        'Acid Splash',
+        'Detect Poison',
+        'Detect Magic',
+        'Read Magic',
+        'Daze',
+        'Dancing Lights',
+        'Flare',
+        'Light',
+        'Ray of Frost',
+        'Ghost Sound',
+        'Disrupt Undead',
+        'Touch of Fatigue',
+        'Mage Hand',
+        'Mending',
+        'Message',
+        'Open/Close',
+        'Arcane Mark',
+        'Prestidigitation'
+      ].filter(spell => this.isSpellAllowedForClass(spell, 'Wizard'));
+    },
+    addWizardPurchasedSpell() {
+      if (!this.character.wizardPurchasedSpells) this.$set(this.character, 'wizardPurchasedSpells', []);
+      this.character.wizardPurchasedSpells.push({ spell: '' });
+    },
+    removeWizardPurchasedSpell(index) {
+      this.character.wizardPurchasedSpells.splice(index, 1);
+    },
+    getWizardPurchasedSpellCost(spellName) {
+      let spellLevel = this.getSpellLevelForClass(spellName, 'Wizard');
+      if (spellLevel < 0) return 0;
+      return (spellLevel === 0 ? 0.5 : spellLevel) * 150;
+    },
     syncPreparedSpellClasses() {
       if (!this.rules.classes || Object.keys(this.rules.classes).length === 0) return;
       let activeClasses = new Set();
@@ -691,7 +1007,7 @@ new Vue({
       });
       activeClasses.forEach(c => {
          let clsData = this.rules.classes[c];
-         if (clsData && clsData.spellSlots) {
+         if (clsData && clsData.spellSlots && clsData.castingType !== 'spontaneous') {
             if (!this.character.preparedSpells[c]) {
                this.$set(this.character.preparedSpells, c, { '0': [], '1': [], '2': [], '3': [], '4': [], '5': [], '6': [], '7': [], '8': [], '9': [] });
             }
@@ -729,6 +1045,11 @@ new Vue({
           while (prep.length > slotInfo.total) {
             prep.pop();
           }
+          prep.forEach((spell, idx) => {
+            if (spell && !this.getSortedPreparedSpellOptions(c, slotInfo.level, idx, slotInfo).includes(spell)) {
+              this.$set(prep, idx, '');
+            }
+          });
           
           if (slotInfo.hasDomainSlot && typeof this.character.preparedDomainSpells[c][slotInfo.level] === 'undefined') {
             this.$set(this.character.preparedDomainSpells[c], slotInfo.level, '');
@@ -800,12 +1121,34 @@ new Vue({
         }
         if (match) {
           let lvl = parseInt(match[1]);
+          if (!this.isSpellAllowedForClass(spellName, className)) continue;
           if (!result[lvl]) result[lvl] = [];
           result[lvl].push(spellName);
         }
       }
       for (let lvl in result) result[lvl].sort();
       return result;
+    },
+    getSpellLevelForClass(spellName, className) {
+      let spellData = this.rules.spells[spellName];
+      let clsData = this.rules.classes[className] || {};
+      if (!spellData || !spellData.level) return -1;
+      let spellListNames = clsData.spellListAliases || [className];
+      for (let spellListName of spellListNames) {
+        let escapedName = String(spellListName).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        let regex = new RegExp(escapedName + '\\s+(\\d+)', 'i');
+        let match = spellData.level.match(regex);
+        if (match) return parseInt(match[1]);
+      }
+      return -1;
+    },
+    isSpellAllowedForClass(spellName, className) {
+      if (className !== 'Wizard') return true;
+      let spellData = this.rules.spells[spellName];
+      if (!spellData) return false;
+      let prohibited = this.character.wizardSpecialization ? (this.character.wizardProhibitedSchools || []) : [];
+      if (!prohibited.length) return true;
+      return !prohibited.includes(spellData.school);
     },
     getAvailableDomainSpells(level) {
       if (!this.character.domains) return [];
@@ -845,11 +1188,13 @@ new Vue({
         if (canCast && spellLevel > 0 && mod >= spellLevel) {
           bonus = Math.floor((mod - spellLevel) / 4) + 1;
         }
+        let specialistBonus = (className === 'Wizard' && this.character.wizardSpecialization && canCast) ? 1 : 0;
         slots.push({
           level: spellLevel,
           base: baseCount,
           bonus: bonus,
-          total: canCast ? (baseCount + bonus) : 0,
+          specialistBonus: specialistBonus,
+          total: canCast ? (baseCount + bonus + specialistBonus) : 0,
           canCast: canCast,
           requiredScore: 10 + spellLevel,
           statName: castingStat,
@@ -898,7 +1243,9 @@ new Vue({
       return slots;
     },
     getSortedSpells(className, level) {
-      let spells = this.classSpells(className)[level] || [];
+      let spells = className === 'Wizard'
+        ? (this.getWizardKnownSpellsByLevel()[level] || [])
+        : (this.classSpells(className)[level] || []);
       let prepared = this.character.preparedSpells[className] ? this.character.preparedSpells[className][level] || [] : [];
       return [...spells].sort((a, b) => {
         let aSelected = prepared.includes(a);
@@ -907,6 +1254,26 @@ new Vue({
         if (!aSelected && bSelected) return 1;
         return a.localeCompare(b);
       });
+    },
+    getSortedPreparedSpellOptions(className, level, slotIndex, slotInfo) {
+      let spells = this.getSortedSpells(className, level);
+      if (className === 'Wizard' && this.character.wizardSpecialization && slotInfo && slotInfo.specialistBonus > 0) {
+        let specialistSlotStart = slotInfo.total - slotInfo.specialistBonus;
+        if (slotIndex >= specialistSlotStart) {
+          spells = spells.filter(spell => {
+            let spellData = this.rules.spells[spell];
+            return spellData && spellData.school === this.character.wizardSpecialization;
+          });
+        }
+      }
+      return spells;
+    },
+    isSpecialistPreparedSlot(className, slotIndex, slotInfo) {
+      return className === 'Wizard'
+        && this.character.wizardSpecialization
+        && slotInfo
+        && slotInfo.specialistBonus > 0
+        && slotIndex >= (slotInfo.total - slotInfo.specialistBonus);
     },
     getSortedKnownSpells(className, level) {
       let spells = this.classSpells(className)[level] || [];
@@ -918,6 +1285,18 @@ new Vue({
         if (!aSelected && bSelected) return 1;
         return a.localeCompare(b);
       });
+    },
+    getFeatCount(featName) {
+      let count = 0;
+      this.character.levels.forEach(level => {
+        if (level.feat === featName) count++;
+        if (level.bonusFeats) {
+          Object.values(level.bonusFeats).forEach(f => {
+            if (f === featName) count++;
+          });
+        }
+      });
+      return count;
     },
     featureMapKey(name) {
       let lower = String(name || '').toLowerCase();
@@ -1336,10 +1715,13 @@ new Vue({
       // Re-calculate state for prereqs
       let bab = 0;
       let feats = [];
+      let classLevels = {};
       for (let i = 0; i <= levelIndex; i++) {
         let lvl = this.character.levels[i];
         let cA = this.rules.classes[lvl.trackA];
         let cB = this.rules.classes[lvl.trackB];
+        if (lvl.trackA) classLevels[lvl.trackA] = (classLevels[lvl.trackA] || 0) + 1;
+        if (lvl.trackB && lvl.trackB !== lvl.trackA) classLevels[lvl.trackB] = (classLevels[lvl.trackB] || 0) + 1;
         let incA = this.getBabIncrement(cA, i + 1);
         let incB = this.getBabIncrement(cB, i + 1);
         bab += Math.max(incA, incB);
@@ -1364,7 +1746,9 @@ new Vue({
           wis: this.getTotalAbility('wis'),
           cha: this.getTotalAbility('cha')
         },
-        level: levelIndex + 1
+        level: levelIndex + 1,
+        classLevels: classLevels,
+        casterLevel: Object.values(classLevels).reduce((max, level) => Math.max(max, level), 0)
       };
     },
 
@@ -1398,6 +1782,10 @@ new Vue({
         case 'SKILL':
           // Skill tracking omitted for simplicity, auto-pass or assume max rank
           return true;
+        case 'CLASS_LEVEL':
+          return (state.classLevels[cond.className] || 0) >= cond.value;
+        case 'CASTER_LEVEL':
+          return state.casterLevel >= cond.value;
         default:
           return true;
       }
@@ -1445,8 +1833,8 @@ new Vue({
         if (lvl.trackB) trackBClasses[lvl.trackB] = (trackBClasses[lvl.trackB] || 0) + 1;
       });
 
-      let trackAStrings = Object.entries(trackAClasses).map(([c, n]) => `${c} ${n}`);
-      let trackBStrings = Object.entries(trackBClasses).map(([c, n]) => `${c} ${n}`);
+      let trackAStrings = Object.entries(trackAClasses).map(([c, n]) => `${this.getClassDisplayName(c)} ${n}`);
+      let trackBStrings = Object.entries(trackBClasses).map(([c, n]) => `${this.getClassDisplayName(c)} ${n}`);
 
       let classString = "";
       if (trackAStrings.length > 0 && trackBStrings.length > 0) {
@@ -1808,7 +2196,7 @@ new Vue({
         });
 
         if (levelsText.length > 0) {
-          output += `${className} Spells: ${slotsString} (Save DC ${saveDcBase} + spell level) - ${levelsText.join('; ')}.\n`;
+          output += `${this.getClassDisplayName(className)} Spells: ${slotsString} (Save DC ${saveDcBase} + spell level) - ${levelsText.join('; ')}.\n`;
         }
       });
 
@@ -1844,7 +2232,7 @@ new Vue({
         });
 
         if (levelsText.length > 0) {
-          output += `${className} Spells Known: ${spellsKnownString} - ${levelsText.join('; ')}. Spells per day: ${slotsPerDayString}. Save DC ${saveDcBase} + spell level.\n`;
+          output += `${this.getClassDisplayName(className)} Spells Known: ${spellsKnownString} - ${levelsText.join('; ')}. Spells per day: ${slotsPerDayString}. Save DC ${saveDcBase} + spell level.\n`;
         }
       });
 

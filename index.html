@@ -112,7 +112,7 @@
               <select v-model="level.trackA" :disabled="isMonsterForced(index, 'A')">
                 <option value="">-- Select Class --</option>
                 <option v-for="clsName in sortedClassesList" :key="clsName" :value="clsName" v-show="!rules.classes[clsName].isMonsterClass && clsName !== level.trackB">
-                  {{ clsName }}
+                  {{ getClassDisplayName(clsName) }}
                 </option>
               </select>
             </div>
@@ -122,7 +122,7 @@
               <select v-model="level.trackB" :disabled="isMonsterForced(index, 'B')">
                 <option value="">-- Select Class --</option>
                 <option v-for="clsName in sortedClassesList" :key="clsName" :value="clsName" v-show="(!rules.classes[clsName].isMonsterClass || isMonsterForced(index, 'B')) && clsName !== level.trackA">
-                  {{ clsName }}
+                  {{ getClassDisplayName(clsName) }}
                 </option>
               </select>
             </div>
@@ -159,7 +159,7 @@
                   <template v-else>
                     <select v-model="level.bonusFeats[tag]" style="width: 100%; border-color: var(--accent-color);">
                       <option value="" disabled selected>-- Select {{ formatBonusFeatName(tag) }} --</option>
-                      <option v-for="featName in sortedFeatNames" :key="'bf_'+featName" :value="featName" v-show="tag === 'humanBonusFeat' || rules.feats[featName][tag]" :style="{ color: checkPrerequisites(featName, index) ? '' : '#555' }">
+                      <option v-for="featName in sortedFeatNames" :key="'bf_'+featName" :value="featName" v-show="isFeatAllowedForBonusTag(featName, tag)" :style="{ color: checkPrerequisites(featName, index) ? '' : '#555' }">
                         {{ featName }}
                       </option>
                     </select>
@@ -270,9 +270,81 @@
           </div>
         </div>
 
+        <div class="foldout" v-if="hasWizardLevel">
+          <div class="foldout-header" @click="ui.showWizardChoices = !ui.showWizardChoices">
+            <span>Wizard Choices</span>
+            <span>{{ ui.showWizardChoices ? 'v' : '>' }}</span>
+          </div>
+          <div class="foldout-content" v-show="ui.showWizardChoices">
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-size: 0.9em; margin-bottom: 3px; font-weight: bold; color: var(--accent-color);">School Specialization</label>
+              <select v-model="character.wizardSpecialization" style="width: 100%; max-width: 360px;">
+                <option value="">-- Generalist Wizard --</option>
+                <option v-for="school in schoolList" :key="'wiz_school_'+school" :value="school">{{ school }}</option>
+              </select>
+              <div v-if="character.wizardSpecialization" style="margin-top: 8px;">
+                <div style="color: var(--text-secondary); font-size: 0.9em; margin-bottom: 6px;">
+                  Displayed as {{ wizardSpecialistName }}. Choose {{ wizardRequiredProhibitedSchoolCount }} prohibited {{ wizardRequiredProhibitedSchoolCount === 1 ? 'school' : 'schools' }}.
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                  <select v-for="(school, idx) in character.wizardProhibitedSchools" :key="'wiz_prohibited_'+idx" v-model="character.wizardProhibitedSchools[idx]" style="width: 220px;">
+                    <option value="">-- Prohibited School --</option>
+                    <option v-for="option in wizardProhibitedSchoolOptions" :key="'wiz_prohibit_opt_'+idx+'_'+option" :value="option" :disabled="character.wizardProhibitedSchools.includes(option) && school !== option">{{ option }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-size: 0.9em; margin-bottom: 8px; font-weight: bold; color: var(--accent-color);">Spellbook</label>
+              <div style="color: var(--text-secondary); font-size: 0.9em; margin-bottom: 8px;">
+                0-level spells are added automatically. Extra copied spells cost {{ wizardSpellbookCost.toLocaleString() }} gp total.
+              </div>
+              <div v-for="(slotInfo, slotIdx) in wizardSpellbookSlots" :key="'wiz_book_'+slotIdx" style="margin-bottom: 12px;">
+                <strong style="display: block; margin-bottom: 5px;">{{ slotInfo.source }}: {{ slotInfo.total }} spell{{ slotInfo.total === 1 ? '' : 's' }} up to level {{ slotInfo.maxSpellLevel }}</strong>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                  <select v-for="(spell, spellIdx) in character.wizardSpellbookSelections[slotIdx]" :key="'wiz_book_spell_'+slotIdx+'_'+spellIdx" v-model="character.wizardSpellbookSelections[slotIdx][spellIdx]" style="width: 220px;">
+                    <option value="">-- Select Spell --</option>
+                    <option v-for="option in getWizardSpellOptionGroups(slotInfo.maxSpellLevel, getWizardSpellOptionsForSpellbookSlot(slotInfo.maxSpellLevel, slotIdx, spellIdx))" :key="'wiz_book_opt_'+slotIdx+'_'+spellIdx+'_'+option.type+'_'+option.value" :value="option.type === 'spell' ? option.value : ''" :disabled="option.type === 'label'">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-top: 10px;">
+                <strong style="display: block; margin-bottom: 5px;">Purchased Spellbook Additions</strong>
+                <div v-for="(entry, idx) in character.wizardPurchasedSpells" :key="'wiz_buy_'+idx" style="display: flex; gap: 10px; align-items: center; margin-bottom: 6px;">
+                  <select v-model="entry.spell" style="width: 260px;">
+                    <option value="">-- Select Spell --</option>
+                    <option v-for="option in getWizardSpellOptionGroups(wizardMaxSpellLevel, getWizardSpellOptionsForPurchasedSpell(idx))" :key="'wiz_buy_opt_'+idx+'_'+option.type+'_'+option.value" :value="option.type === 'spell' ? option.value : ''" :disabled="option.type === 'label'">
+                      {{ option.type === 'spell' ? option.label + ' (' + option.cost.toLocaleString() + ' gp)' : option.label }}
+                    </option>
+                  </select>
+                  <button @click="removeWizardPurchasedSpell(idx)" style="background: transparent; color: #ff6b6b; border: none; cursor: pointer;">X</button>
+                </div>
+                <button @click="addWizardPurchasedSpell" class="tab-btn">+ Buy Spell</button>
+              </div>
+            </div>
+
+            <div v-if="getFeatCount('Spell Mastery') > 0">
+              <label style="display: block; font-size: 0.9em; margin-bottom: 8px; font-weight: bold; color: var(--accent-color);">Spell Mastery</label>
+              <div style="color: var(--text-secondary); font-size: 0.9em; margin-bottom: 8px;">
+                {{ getFeatCount('Spell Mastery') }} feat instance{{ getFeatCount('Spell Mastery') === 1 ? '' : 's' }} x Intelligence modifier {{ Math.max(0, getAbilityMod('int')) }} = {{ wizardSpellMasterySlots }} mastered spell{{ wizardSpellMasterySlots === 1 ? '' : 's' }}.
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <select v-for="(spell, idx) in character.wizardSpellMastery" :key="'wiz_mastery_'+idx" v-model="character.wizardSpellMastery[idx]" style="width: 220px;">
+                  <option value="">-- Select Spell --</option>
+                  <option v-for="option in getWizardKnownSpellNames()" :key="'wiz_mastery_opt_'+idx+'_'+option" :value="option">{{ option }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="foldout" v-for="className in spellcastingClasses" :key="className">
           <div class="foldout-header" @click="ui.showSpells = !ui.showSpells">
-            <span>Spells ({{ className }})</span>
+            <span>Spells ({{ getClassDisplayName(className) }})</span>
             <span>{{ ui.showSpells ? '▼' : '▶' }}</span>
           </div>
           <div class="foldout-content" v-show="ui.showSpells">
@@ -285,6 +357,9 @@
                       <span v-if="slotInfo.bonus > 0" style="color: #61afef;">
                         ({{ slotInfo.base }} base + {{ slotInfo.bonus }} {{ slotInfo.statName.charAt(0).toUpperCase() + slotInfo.statName.slice(1) }})
                       </span>
+                      <span v-if="slotInfo.specialistBonus > 0" style="color: #61afef;">
+                        (+{{ slotInfo.specialistBonus }} specialist)
+                      </span>
                     </template>
                     <template v-else>
                       <span style="color: #ff7b72; font-weight: bold;">Locked (Requires {{ slotInfo.requiredScore }} {{ slotInfo.statName.charAt(0).toUpperCase() + slotInfo.statName.slice(1) }})</span>
@@ -294,8 +369,8 @@
                 <div v-if="slotInfo.canCast && character.preparedSpells[className]" style="margin: 0; padding-left: 0; display: flex; flex-direction: column; gap: 5px;">
                   <div v-for="(slotVal, idx) in character.preparedSpells[className][slotInfo.level]" :key="'slot_'+slotInfo.level+'_'+idx">
                     <select v-model="character.preparedSpells[className][slotInfo.level][idx]" style="width: 100%; max-width: 300px;">
-                      <option value="">-- Empty Slot --</option>
-                      <option v-for="spell in getSortedSpells(className, slotInfo.level)" :key="'opt_'+spell" :value="spell">{{ spell }}</option>
+                      <option value="">-- Empty {{ isSpecialistPreparedSlot(className, idx, slotInfo) ? character.wizardSpecialization + ' Slot' : 'Slot' }} --</option>
+                      <option v-for="spell in getSortedPreparedSpellOptions(className, slotInfo.level, idx, slotInfo)" :key="'opt_'+spell" :value="spell">{{ spell }}</option>
                     </select>
                   </div>
                 </div>
@@ -382,7 +457,7 @@
         <div v-if="preparedCasters.length > 0" style="margin-bottom: 20px;">
           <h3 style="border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">Spells Prepared</h3>
           <div v-for="c in preparedCasters" :key="c" style="margin-bottom: 20px; padding: 15px; border: 1px solid var(--border-color); border-radius: 4px; background: rgba(0,0,0,0.2);">
-            <h4 style="margin-top: 0; color: var(--accent-color);">{{ c }} Spells</h4>
+            <h4 style="margin-top: 0; color: var(--accent-color);">{{ getClassDisplayName(c) }} Spells</h4>
             
             <div v-if="c === 'Cleric'" style="margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 4px;">
               <h5 style="margin-top: 0; margin-bottom: 10px; color: var(--text-primary);">Cleric Options</h5>
@@ -412,7 +487,7 @@
                           v-model="character.preparedSpells[c][slotInfo.level][idx]"
                           style="width: 200px;">
                     <option value="">-- Select Spell --</option>
-                    <option v-for="spellName in getSortedSpells(c, slotInfo.level)" :key="spellName" :value="spellName">
+                    <option v-for="spellName in getSortedPreparedSpellOptions(c, slotInfo.level, idx, slotInfo)" :key="spellName" :value="spellName">
                       {{ spellName }}
                     </option>
                   </select>
@@ -435,7 +510,7 @@
         <div v-if="spontaneousCasters.length > 0">
           <h3 style="border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">Spells Known</h3>
           <div v-for="c in spontaneousCasters" :key="c" style="margin-bottom: 20px; padding: 15px; border: 1px solid var(--border-color); border-radius: 4px; background: rgba(0,0,0,0.2);">
-            <h4 style="margin-top: 0; color: var(--accent-color);">{{ c }} Spells</h4>
+            <h4 style="margin-top: 0; color: var(--accent-color);">{{ getClassDisplayName(c) }} Spells</h4>
             
             <div v-for="slotInfo in classKnownSlots(c)" :key="slotInfo.level" style="margin-bottom: 10px;">
               <div v-if="slotInfo.total > 0">
