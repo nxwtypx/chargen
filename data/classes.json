@@ -305,7 +305,16 @@
         }
       ]
     },
-    "startingGold": 160
+    "startingGold": 160,
+    "weaponProficiencies": [
+      "simple",
+      "martial"
+    ],
+    "armorProficiencies": [
+      "light",
+      "medium",
+      "shield"
+    ]
   },
   "Bard": {
     "name": "Bard",
@@ -781,7 +790,20 @@
         4
       ]
     },
-    "startingGold": 160
+    "startingGold": 160,
+    "weaponProficiencies": [
+      "simple",
+      "longsword",
+      "rapier",
+      "sap",
+      "short sword",
+      "shortbow",
+      "whip"
+    ],
+    "armorProficiencies": [
+      "light",
+      "shield"
+    ]
   },
   "Cleric": {
     "name": "Cleric",
@@ -991,7 +1013,16 @@
         4,
         4
       ]
-    }
+    },
+    "weaponProficiencies": [
+      "simple"
+    ],
+    "armorProficiencies": [
+      "light",
+      "medium",
+      "heavy",
+      "shield"
+    ]
   },
   "Druid": {
     "name": "Druid",
@@ -1428,7 +1459,23 @@
         4,
         4
       ]
-    }
+    },
+    "weaponProficiencies": [
+      "club",
+      "dagger",
+      "dart",
+      "quarterstaff",
+      "scimitar",
+      "sickle",
+      "shortspear",
+      "sling",
+      "spear"
+    ],
+    "armorProficiencies": [
+      "light",
+      "medium",
+      "shield"
+    ]
   },
   "Fighter": {
     "name": "Fighter",
@@ -1465,7 +1512,18 @@
         18,
         20
       ]
-    }
+    },
+    "weaponProficiencies": [
+      "simple",
+      "martial"
+    ],
+    "armorProficiencies": [
+      "light",
+      "medium",
+      "heavy",
+      "shield",
+      "towerShield"
+    ]
   },
   "Giant": {
     "name": "Giant",
@@ -1478,7 +1536,17 @@
     },
     "skillPoints": 2,
     "classSkills": [],
-    "isMonsterClass": true
+    "isMonsterClass": true,
+    "weaponProficiencies": [
+      "simple",
+      "martial"
+    ],
+    "armorProficiencies": [
+      "light",
+      "medium",
+      "heavy",
+      "shield"
+    ]
   },
   "Healer": {
     "name": "Healer",
@@ -1814,7 +1882,14 @@
       "Skill Focus (Heal)": [
         2
       ]
-    }
+    },
+    "weaponProficiencies": [
+      "simple"
+    ],
+    "armorProficiencies": [
+      "light",
+      "shield"
+    ]
   },
   "Level Adjustment": {
     "name": "Level Adjustment",
@@ -2194,7 +2269,23 @@
           "replaces": "Slow fall 90 ft."
         }
       ]
-    }
+    },
+    "weaponProficiencies": [
+      "club",
+      "light crossbow",
+      "heavy crossbow",
+      "dagger",
+      "handaxe",
+      "javelin",
+      "kama",
+      "nunchaku",
+      "quarterstaff",
+      "sai",
+      "shuriken",
+      "siangham",
+      "sling"
+    ],
+    "armorProficiencies": []
   },
   "Paladin": {
     "source": "SRD",
@@ -2348,6 +2439,16 @@
       "20": [
         "Smite evil 5/day"
       ]
-    }
+    },
+    "weaponProficiencies": [
+      "simple",
+      "martial"
+    ],
+    "armorProficiencies": [
+      "light",
+      "medium",
+      "heavy",
+      "shield"
+    ]
   }
 }

@@ -133,10 +133,18 @@
                 <div>
                   <select v-model="level.feat" style="width: 100%;">
                     <option value="">-- Select Feat --</option>
-                    <option v-for="(featData, featName) in rules.feats" :key="featName" :value="featName">
+                    <option v-for="featName in sortedFeatNames" :key="featName" :value="featName" :style="{ color: checkPrerequisites(featName, index) ? '' : '#555' }">
                       {{ featName }}
                     </option>
                   </select>
+                  <div v-if="level.feat && rules.feats[level.feat] && rules.feats[level.feat].requiresParameter" style="margin-top: 2px;">
+                    <select v-model="level.featParam" style="width: 95%; border-color: #666; margin-left: 5%;">
+                      <option value="">-- Select {{ rules.feats[level.feat].requiresParameter }} --</option>
+                      <option v-if="rules.feats[level.feat].requiresParameter === 'weapon'" v-for="w in weaponList" :key="w" :value="w">{{ w }}</option>
+                      <option v-if="rules.feats[level.feat].requiresParameter === 'skill'" v-for="s in skillList" :key="s" :value="s">{{ s }}</option>
+                      <option v-if="rules.feats[level.feat].requiresParameter === 'school'" v-for="s in schoolList" :key="s" :value="s">{{ s }}</option>
+                    </select>
+                  </div>
                   <div v-if="level.feat && !checkPrerequisites(level.feat, index)" class="feat-error">
                     Prerequisites not met!
                   </div>
@@ -151,10 +159,18 @@
                   <template v-else>
                     <select v-model="level.bonusFeats[tag]" style="width: 100%; border-color: var(--accent-color);">
                       <option value="" disabled selected>-- Select {{ formatBonusFeatName(tag) }} --</option>
-                      <option v-for="(featData, featName) in rules.feats" :key="'bf_'+featName" :value="featName" v-show="tag === 'humanBonusFeat' || featData[tag]">
+                      <option v-for="featName in sortedFeatNames" :key="'bf_'+featName" :value="featName" v-show="tag === 'humanBonusFeat' || rules.feats[featName][tag]" :style="{ color: checkPrerequisites(featName, index) ? '' : '#555' }">
                         {{ featName }}
                       </option>
                     </select>
+                    <div v-if="level.bonusFeats[tag] && rules.feats[level.bonusFeats[tag]] && rules.feats[level.bonusFeats[tag]].requiresParameter" style="margin-top: 2px;">
+                      <select v-model="level.bonusFeatsParams[tag]" style="width: 95%; border-color: #666; margin-left: 5%;">
+                        <option value="">-- Select {{ rules.feats[level.bonusFeats[tag]].requiresParameter }} --</option>
+                        <option v-if="rules.feats[level.bonusFeats[tag]].requiresParameter === 'weapon'" v-for="w in weaponList" :key="w" :value="w">{{ w }}</option>
+                        <option v-if="rules.feats[level.bonusFeats[tag]].requiresParameter === 'skill'" v-for="s in skillList" :key="s" :value="s">{{ s }}</option>
+                        <option v-if="rules.feats[level.bonusFeats[tag]].requiresParameter === 'school'" v-for="s in schoolList" :key="s" :value="s">{{ s }}</option>
+                      </select>
+                    </div>
                     <div v-if="level.bonusFeats[tag] && !tag.startsWith('monkBonusFeat') && !checkPrerequisites(level.bonusFeats[tag], index)" class="feat-error">
                       Prerequisites not met!
                     </div>

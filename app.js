@@ -19,7 +19,7 @@ new Vue({
       alignment: 'LG',
       baseAbilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
       levels: [
-        { trackA: '', trackB: '', feat: '', bonusFeats: {} }
+        { trackA: '', trackB: '', feat: '', featParam: '', bonusFeats: {}, bonusFeatsParams: {} }
       ],
       equipped: {
         weapons: [ { primary: -1, offhand: -1, wieldTwoHanded: false } ],
@@ -96,8 +96,26 @@ new Vue({
       return total;
     },
     characterSize() {
-      let raceData = this.rules.races[this.character.race];
-      return raceData ? raceData.size : 'Medium';
+      let rData = this.rules.races[this.character.race];
+      return rData ? rData.size : 'Medium';
+    },
+    weaponList() {
+      let list = ['Unarmed strike', 'Grapple', 'Ray'];
+      if (this.rules.weapons) {
+        this.rules.weapons.forEach(w => {
+          if (!list.includes(w.name)) list.push(w.name);
+        });
+      }
+      return list.sort();
+    },
+    skillList() {
+      return this.rules.skills ? Object.keys(this.rules.skills).sort() : [];
+    },
+    schoolList() {
+      return ['Abjuration', 'Conjuration', 'Divination', 'Enchantment', 'Evocation', 'Illusion', 'Necromancy', 'Transmutation'];
+    },
+    sortedFeatNames() {
+      return Object.keys(this.rules.feats).sort();
     },
     filteredWeapons() {
       if (!this.rules.weapons || !Array.isArray(this.rules.weapons)) return [];
@@ -1065,7 +1083,7 @@ new Vue({
       if (tA && !this.rules.classes[tA]) tA = '';
       if (tB && !this.rules.classes[tB]) tB = '';
 
-      this.character.levels.push({ trackA: tA, trackB: tB, feat: '', bonusFeats: {} });
+      this.character.levels.push({ trackA: tA, trackB: tB, feat: '', featParam: '', bonusFeats: {}, bonusFeatsParams: {} });
       this.handleRaceChange(); // Re-apply monster enforcement
     },
 
@@ -1296,16 +1314,93 @@ new Vue({
       }
 
       // Feats string
-      let allFeats = this.character.levels.flatMap((l, i) => {
-        let arr = [l.feat];
-        if (l.bonusFeats) arr.push(...Object.values(l.bonusFeats));
+      let allFeatsArr = this.character.levels.flatMap((l, i) => {
+        let arr = [];
+        if (l.feat) {
+           let fStr = l.feat;
+           if (l.featParam) fStr += ` (${l.featParam})`;
+           arr.push(fStr);
+        }
+        if (l.bonusFeats) {
+           Object.keys(l.bonusFeats).forEach(tag => {
+              let fName = l.bonusFeats[tag];
+              let fStr = fName;
+              if (l.bonusFeatsParams && l.bonusFeatsParams[tag]) fStr += ` (${l.bonusFeatsParams[tag]})`;
+              arr.push(fStr);
+           });
+        }
         this.getBonusFeatTags(i).forEach(tag => {
-          if (this.rules.feats[tag] && !arr.includes(tag)) {
+          if (this.rules.feats[tag] && !arr.some(f => f.startsWith(tag))) {
             arr.push(tag);
           }
         });
         return arr;
-      }).filter(f => f).join(', ');
+      }).filter(f => f);
+      let allFeats = allFeatsArr.join(', ');
+
+      // Weapon Proficiencies
+      let proficiencies = new Set();
+      this.character.levels.forEach(lvl => {
+        let clsA = this.rules.classes[lvl.trackA];
+        let clsB = this.rules.classes[lvl.trackB];
+        if (clsA && clsA.weaponProficiencies) clsA.weaponProficiencies.forEach(p => proficiencies.add(p.toLowerCase()));
+        if (clsB && clsB.weaponProficiencies) clsB.weaponProficiencies.forEach(p => proficiencies.add(p.toLowerCase()));
+      });
+      if (raceData && raceData.weaponProficiencies) {
+        raceData.weaponProficiencies.forEach(p => proficiencies.add(p.toLowerCase()));
+      }
+      if (this.character.race === 'Elf') {
+        ['longsword', 'rapier', 'longbow', 'composite longbow', 'shortbow', 'composite shortbow'].forEach(p => proficiencies.add(p));
+      }
+      allFeatsArr.forEach(feat => {
+        let fLower = feat.toLowerCase();
+        if (fLower === 'simple weapon proficiency') proficiencies.add('simple');
+        if (fLower === 'martial weapon proficiency') proficiencies.add('martial');
+        let m = fLower.match(/(martial|exotic) weapon proficiency \((.*?)\)/i);
+        if (m) proficiencies.add(m[2].trim());
+      });
+
+      // Armor Proficiencies
+      let armorProf = new Set();
+      this.character.levels.forEach(lvl => {
+        let clsA = this.rules.classes[lvl.trackA];
+        let clsB = this.rules.classes[lvl.trackB];
+        if (clsA && clsA.armorProficiencies) clsA.armorProficiencies.forEach(p => armorProf.add(p.toLowerCase()));
+        if (clsB && clsB.armorProficiencies) clsB.armorProficiencies.forEach(p => armorProf.add(p.toLowerCase()));
+      });
+      allFeatsArr.forEach(feat => {
+        let fLower = feat.toLowerCase();
+        if (fLower === 'armor proficiency (light)') armorProf.add('light');
+        if (fLower === 'armor proficiency (medium)') armorProf.add('medium');
+        if (fLower === 'armor proficiency (heavy)') armorProf.add('heavy');
+        if (fLower === 'shield proficiency') armorProf.add('shield');
+        if (fLower === 'tower shield proficiency') armorProf.add('towershield');
+      });
+
+      let profAcp = 0;
+      let nonProfAcp = 0;
+      let bodyVal = this.character.equipped.chakras.Body;
+      if (bodyVal !== -1 && bodyVal !== '') {
+        let armor = this.character.armor[bodyVal];
+        if (armor) {
+           let type = armor.type ? armor.type.toLowerCase() : '';
+           let pen = Number(armor.checkPenalty) || 0;
+           if (type && !armorProf.has(type)) nonProfAcp += pen;
+           else profAcp += pen;
+        }
+      }
+      let wsZero = this.character.equipped.weapons[0];
+      if (wsZero && wsZero.offhand !== -1 && wsZero.offhand !== '' && typeof wsZero.offhand === 'string' && wsZero.offhand.startsWith('a_')) {
+        let idx = parseInt(wsZero.offhand.substring(2));
+        let shield = this.character.armor[idx];
+        if (shield) {
+           let type = shield.type ? shield.type.toLowerCase() : '';
+           let pen = Number(shield.checkPenalty) || 0;
+           if (type && type.includes('tower') && !armorProf.has('towershield')) nonProfAcp += pen;
+           else if (type && !armorProf.has('shield')) nonProfAcp += pen;
+           else profAcp += pen;
+        }
+      }
 
       // Hit Dice (HD)
       let hdCounts = {};
@@ -1348,8 +1443,8 @@ new Vue({
       let strMod = this.getAbilityMod('str');
       let dexMod = this.getAbilityMod('dex');
       let sizeMod = stats.ac.sizeMod;
-      let meleeAtk = stats.bab + strMod + sizeMod;
-      let rangedAtk = stats.bab + dexMod + sizeMod;
+      let meleeAtk = stats.bab + strMod + sizeMod + nonProfAcp;
+      let rangedAtk = stats.bab + dexMod + sizeMod + nonProfAcp;
       let attackStrings = [];
       let fullAttackStrings = [];
 
@@ -1363,6 +1458,17 @@ new Vue({
           if (weapon) {
             let isRanged = weapon.rangeIncrement && weapon.rangeIncrement !== '—';
             let atkBonus = isRanged ? rangedAtk : meleeAtk;
+            
+            let wNameLower = weapon.name.toLowerCase();
+            let wCatLower = weapon.category ? weapon.category.toLowerCase() : '';
+            let isProficient = true;
+            if (wNameLower !== 'unarmed strike' && !wNameLower.includes('gauntlet')) {
+              if (!proficiencies.has(wNameLower) && !proficiencies.has(wCatLower)) {
+                isProficient = false;
+                atkBonus -= 4;
+              }
+            }
+
             let twoHanded = false;
             if (!isRanged && strMod > 0) {
               let lowerClass = weapon.classification ? weapon.classification.toLowerCase() : '';
@@ -1474,19 +1580,6 @@ new Vue({
       let skillStrings = [];
       let calcSkills = this.calculatedSkills;
       
-      let acp = 0;
-      let bodyVal = this.character.equipped.chakras.Body;
-      if (bodyVal !== -1 && bodyVal !== '') {
-        let armor = this.character.armor[bodyVal];
-        if (armor && armor.checkPenalty) acp += (Number(armor.checkPenalty) || 0);
-      }
-      let wsZero = this.character.equipped.weapons[0];
-      if (wsZero && wsZero.offhand !== -1 && wsZero.offhand !== '' && typeof wsZero.offhand === 'string' && wsZero.offhand.startsWith('a_')) {
-        let idx = parseInt(wsZero.offhand.substring(2));
-        let shield = this.character.armor[idx];
-        if (shield && shield.checkPenalty) acp += (Number(shield.checkPenalty) || 0);
-      }
-
       Array.from(calcSkills.keys()).sort().forEach(key => {
         let ranks = Math.floor(calcSkills.get(key));
         if (ranks > 0) {
@@ -1502,9 +1595,18 @@ new Vue({
               total += this.getAbilityMod(sData.keyAbility);
             }
             if (sData.armorCheckPenalty) {
-              total += acp;
+              total += (profAcp + nonProfAcp);
+            } else if (sData.keyAbility === 'str' || sData.keyAbility === 'dex') {
+              total += nonProfAcp;
             }
           }
+          
+          allFeatsArr.forEach(featName => {
+            let fData = this.rules.feats[featName];
+            if (fData && fData.skillBonuses && fData.skillBonuses[sName]) {
+              total += fData.skillBonuses[sName];
+            }
+          });
           
           let displayName = sName;
           if (spec) displayName += ` (${spec})`;
