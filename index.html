@@ -227,6 +227,41 @@
           </div>
         </div>
 
+        <div class="foldout" v-if="hasRogueLevel">
+          <div class="foldout-header" @click="ui.showRogueChoices = !ui.showRogueChoices">
+            <span>Rogue Choices</span>
+            <span>{{ ui.showRogueChoices ? 'v' : '>' }}</span>
+          </div>
+          <div class="foldout-content" v-show="ui.showRogueChoices">
+            <div v-if="rogueSpecialSlots.length > 0">
+              <label style="display: block; font-size: 0.9em; margin-bottom: 8px; font-weight: bold; color: var(--accent-color);">Special Abilities</label>
+              <div v-for="(slotLevel, idx) in rogueSpecialSlots" :key="'rogue_special_'+slotLevel" style="display: grid; grid-template-columns: 120px minmax(220px, 1fr); gap: 10px; align-items: center; margin-bottom: 10px;">
+                <div style="color: var(--text-secondary);">Level {{ slotLevel }}</div>
+                <select v-model="character.rogueSpecialAbilities[idx]" style="width: 100%; max-width: 360px;">
+                  <option value="">-- Select Special Ability --</option>
+                  <option v-for="ability in rogueSpecialAbilityOptions" :key="'rogue_special_opt_'+idx+'_'+ability" :value="ability">{{ ability }}</option>
+                </select>
+              </div>
+
+              <div v-if="rogueSkillMasterySlots > 0" style="margin-top: 15px;">
+                <label style="display: block; font-size: 0.9em; margin-bottom: 8px; font-weight: bold; color: var(--accent-color);">Skill Mastery</label>
+                <div style="color: var(--text-secondary); font-size: 0.9em; margin-bottom: 8px;">
+                  {{ rogueSkillMasterySlots }} skill{{ rogueSkillMasterySlots === 1 ? '' : 's' }} from {{ (character.rogueSpecialAbilities || []).filter(ability => ability === 'Skill Mastery').length }} Skill Mastery selection{{ (character.rogueSpecialAbilities || []).filter(ability => ability === 'Skill Mastery').length === 1 ? '' : 's' }}.
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                  <select v-for="(skill, idx) in character.rogueSkillMastery" :key="'rogue_mastery_'+idx" v-model="character.rogueSkillMastery[idx]" style="width: 220px;">
+                    <option value="">-- Select Skill --</option>
+                    <option v-for="option in getRogueSkillMasteryOptions(idx)" :key="'rogue_mastery_opt_'+idx+'_'+option" :value="option">{{ option }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div v-else style="color: var(--text-secondary); font-size: 0.9em;">
+              Rogue special abilities begin at level 10.
+            </div>
+          </div>
+        </div>
+
         <div class="foldout" v-if="hasRangerLevel">
           <div class="foldout-header" @click="ui.showRangerChoices = !ui.showRangerChoices">
             <span>Ranger Choices</span>

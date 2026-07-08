@@ -21,6 +21,18 @@
       "Survival",
       "Swim"
     ],
+    "trapSenseProgression": {
+      "3": 1,
+      "6": 2,
+      "9": 3,
+      "12": 4,
+      "15": 5,
+      "18": 6
+    },
+    "uncannyDodgeProgression": {
+      "uncanny": 2,
+      "improved": 5
+    },
     "features": {
       "1": [
         {
@@ -2286,6 +2298,110 @@
       "sling"
     ],
     "armorProficiencies": []
+  },
+  "Rogue": {
+    "name": "Rogue",
+    "source": "SRD",
+    "alignment": "Any",
+    "hitDie": 6,
+    "babProgression": "average",
+    "saves": {
+      "fort": "poor",
+      "ref": "good",
+      "will": "poor"
+    },
+    "skillPoints": 8,
+    "classSkills": [
+      "Appraise",
+      "Balance",
+      "Bluff",
+      "Climb",
+      "Craft",
+      "Decipher Script",
+      "Diplomacy",
+      "Disable Device",
+      "Disguise",
+      "Escape Artist",
+      "Forgery",
+      "Gather Information",
+      "Hide",
+      "Intimidate",
+      "Jump",
+      "Knowledge (Local)",
+      "Listen",
+      "Move Silently",
+      "Open Lock",
+      "Perform",
+      "Profession",
+      "Search",
+      "Sense Motive",
+      "Sleight Of Hand",
+      "Spot",
+      "Swim",
+      "Tumble",
+      "Use Magic Device",
+      "Use Rope"
+    ],
+    "sneakAttackProgression": {
+      "1": 1,
+      "3": 2,
+      "5": 3,
+      "7": 4,
+      "9": 5,
+      "11": 6,
+      "13": 7,
+      "15": 8,
+      "17": 9,
+      "19": 10
+    },
+    "trapSenseProgression": {
+      "3": 1,
+      "6": 2,
+      "9": 3,
+      "12": 4,
+      "15": 5,
+      "18": 6
+    },
+    "uncannyDodgeProgression": {
+      "uncanny": 4,
+      "improved": 8
+    },
+    "features": {
+      "1": [
+        {
+          "name": "Trapfinding",
+          "description": "Can use Search to find traps with DCs higher than 20 and Disable Device to disarm magic traps.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ],
+      "2": [
+        {
+          "name": "Evasion",
+          "description": "If wearing light armor or no armor, take no damage on a successful Reflex save against an attack that normally deals half damage.",
+          "abilityType": "Ex",
+          "showOnSheet": true,
+          "showOnBlock": true,
+          "isSpecialAttack": false,
+          "isSpecialQuality": true
+        }
+      ]
+    },
+    "startingGold": 125,
+    "weaponProficiencies": [
+      "simple",
+      "crossbow, hand",
+      "rapier",
+      "sap",
+      "shortbow",
+      "sword, short"
+    ],
+    "armorProficiencies": [
+      "light"
+    ]
   },
   "Ranger": {
     "name": "Ranger",

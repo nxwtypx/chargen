@@ -44,13 +44,16 @@ new Vue({
       wizardProhibitedSchools: [],
       wizardSpellbookSelections: [],
       wizardPurchasedSpells: [],
-      wizardSpellMastery: []
+      wizardSpellMastery: [],
+      rogueSpecialAbilities: [],
+      rogueSkillMastery: []
     },
     ui: {
       showSpells: false,
       showFeatures: true,
       showRangerChoices: false,
       showWizardChoices: false,
+      showRogueChoices: false,
       shopTab: 'Weapons',
       shopSearch: '',
       shopCategory: ''
@@ -375,6 +378,86 @@ new Vue({
         }
       }
 
+      let sneakAttackDice = this.getStackedProgressionTotal(classLevels, 'sneakAttackProgression');
+      if (sneakAttackDice > 0) {
+        featuresMap.set('Sneak attack', {
+          name: `Sneak attack +${sneakAttackDice}d6`,
+          description: 'Deal extra precision damage when the target is denied Dexterity bonus to AC or flanked. Ranged sneak attacks apply within 30 feet.',
+          abilityType: 'Ex',
+          showOnSheet: true,
+          showOnBlock: true,
+          isSpecialAttack: true,
+          isSpecialQuality: false
+        });
+      }
+
+      let trapSenseBonus = this.getStackedProgressionTotal(classLevels, 'trapSenseProgression');
+      if (trapSenseBonus > 0) {
+        featuresMap.set('Trap sense', {
+          name: `Trap sense +${trapSenseBonus}`,
+          description: `+${trapSenseBonus} bonus on Reflex saves and AC against traps. Trap sense bonuses from multiple classes stack.`,
+          abilityType: 'Ex',
+          showOnSheet: true,
+          showOnBlock: true,
+          isSpecialAttack: false,
+          isSpecialQuality: true
+        });
+      }
+
+      let uncanny = this.getUncannyDodgeState(classLevels);
+      if (uncanny.hasImproved) {
+        featuresMap.set('Uncanny dodge', {
+          name: 'Improved uncanny dodge',
+          description: `Cannot be flanked except by a rogue at least four levels higher than the character's ${uncanny.effectiveLevel} effective uncanny dodge level.`,
+          abilityType: 'Ex',
+          showOnSheet: true,
+          showOnBlock: true,
+          isSpecialAttack: false,
+          isSpecialQuality: true
+        });
+      } else if (uncanny.hasUncanny) {
+        featuresMap.set('Uncanny dodge', {
+          name: 'Uncanny dodge',
+          description: 'Retain Dexterity bonus to AC even if caught flat-footed or struck by an invisible attacker.',
+          abilityType: 'Ex',
+          showOnSheet: true,
+          showOnBlock: true,
+          isSpecialAttack: false,
+          isSpecialQuality: true
+        });
+      }
+
+      let rogueLevels = classLevels['Rogue'] || 0;
+      if (rogueLevels >= 10) {
+        let selectedSpecials = (this.character.rogueSpecialAbilities || []).filter(Boolean);
+        selectedSpecials.forEach((ability, idx) => {
+          let desc = this.getRogueSpecialAbilityDescription(ability);
+          let featureKey = ability === 'Improved Evasion' ? 'Evasion' : `Rogue special ability ${idx + 1}`;
+          featuresMap.set(featureKey, {
+            name: ability,
+            description: desc,
+            abilityType: ability === 'Skill Mastery' ? '' : 'Ex',
+            showOnSheet: true,
+            showOnBlock: true,
+            isSpecialAttack: ability === 'Crippling Strike' || ability === 'Opportunist',
+            isSpecialQuality: ability !== 'Crippling Strike' && ability !== 'Opportunist'
+          });
+        });
+
+        let masterySkills = (this.character.rogueSkillMastery || []).filter(Boolean);
+        if (masterySkills.length > 0) {
+          featuresMap.set('Rogue skill mastery skills', {
+            name: 'Skill Mastery Skills',
+            description: `May take 10 under stress with: ${masterySkills.join(', ')}.`,
+            abilityType: '',
+            showOnSheet: true,
+            showOnBlock: false,
+            isSpecialAttack: false,
+            isSpecialQuality: true
+          });
+        }
+      }
+
       let wizardLevels = classLevels['Wizard'] || 0;
       if (wizardLevels > 0 && this.character.wizardSpecialization) {
         let prohibited = (this.character.wizardProhibitedSchools || []).filter(s => s);
@@ -508,6 +591,28 @@ new Vue({
     },
     hasWizardLevel() {
       return this.classLevel('Wizard') > 0;
+    },
+    hasRogueLevel() {
+      return this.classLevel('Rogue') > 0;
+    },
+    rogueSpecialSlots() {
+      let rogueLevel = this.classLevel('Rogue');
+      return [10, 13, 16, 19].filter(level => rogueLevel >= level);
+    },
+    rogueSpecialAbilityOptions() {
+      return [
+        'Crippling Strike',
+        'Defensive Roll',
+        'Improved Evasion',
+        'Opportunist',
+        'Skill Mastery',
+        'Slippery Mind',
+        'Feat'
+      ];
+    },
+    rogueSkillMasterySlots() {
+      let count = (this.character.rogueSpecialAbilities || []).filter(ability => ability === 'Skill Mastery').length;
+      return count * Math.max(0, 3 + this.getAbilityMod('int'));
     },
     wizardSpecialistName() {
       let names = {
@@ -672,6 +777,7 @@ new Vue({
         this.syncKnownSpellArrays();
         this.syncRangerChoices();
         this.syncWizardChoices();
+        this.syncRogueChoices();
       },
       deep: true,
       immediate: true
@@ -681,6 +787,7 @@ new Vue({
         this.syncPreparedSpellArrays();
         this.syncKnownSpellArrays();
         this.syncWizardChoices();
+        this.syncRogueChoices();
       },
       deep: true
     },
@@ -786,6 +893,85 @@ new Vue({
         return 'Two-Weapon Fighting';
       }
       return 'choice pending';
+    },
+    syncRogueChoices() {
+      if (!this.character.rogueSpecialAbilities) this.$set(this.character, 'rogueSpecialAbilities', []);
+      if (!this.character.rogueSkillMastery) this.$set(this.character, 'rogueSkillMastery', []);
+
+      if (!this.hasRogueLevel) {
+        this.character.rogueSpecialAbilities.splice(0);
+        this.character.rogueSkillMastery.splice(0);
+        return;
+      }
+
+      let slots = this.rogueSpecialSlots;
+      while (this.character.rogueSpecialAbilities.length < slots.length) this.character.rogueSpecialAbilities.push('');
+      while (this.character.rogueSpecialAbilities.length > slots.length) this.character.rogueSpecialAbilities.pop();
+      this.character.rogueSpecialAbilities.forEach((ability, idx) => {
+        if (ability && !this.rogueSpecialAbilityOptions.includes(ability)) {
+          this.$set(this.character.rogueSpecialAbilities, idx, '');
+        }
+      });
+
+      while (this.character.rogueSkillMastery.length < this.rogueSkillMasterySlots) this.character.rogueSkillMastery.push('');
+      while (this.character.rogueSkillMastery.length > this.rogueSkillMasterySlots) this.character.rogueSkillMastery.pop();
+      this.character.rogueSkillMastery.forEach((skill, idx) => {
+        if (skill && !this.getRogueSkillMasteryOptions(idx).includes(skill)) {
+          this.$set(this.character.rogueSkillMastery, idx, '');
+        }
+      });
+    },
+    getRogueSkillMasteryOptions(currentIndex) {
+      let selected = new Set((this.character.rogueSkillMastery || []).filter((skill, idx) => skill && idx !== currentIndex));
+      return this.skillList.filter(skill => !selected.has(skill));
+    },
+    getRogueSpecialAbilityDescription(ability) {
+      const descriptions = {
+        'Crippling Strike': 'A successful sneak attack also deals 2 points of Strength damage.',
+        'Defensive Roll': 'Once per day, attempt a Reflex save to take half damage from a blow that would reduce the rogue to 0 or fewer hit points.',
+        'Improved Evasion': 'Take no damage on a successful Reflex save, and half damage on a failed Reflex save, against effects that allow Reflex half.',
+        'Opportunist': 'Once per round, make an attack of opportunity against an opponent just damaged in melee by another character.',
+        'Skill Mastery': 'May take 10 with selected skills even when stress and distractions would normally prevent it.',
+        'Slippery Mind': 'After failing a save against an enchantment effect, attempt the saving throw again 1 round later at the same DC.',
+        'Feat': 'Gain a bonus feat in place of a rogue special ability.'
+      };
+      return descriptions[ability] || '';
+    },
+    getStackedProgressionTotal(classLevels, progressionKey) {
+      let total = 0;
+      Object.entries(classLevels || {}).forEach(([className, level]) => {
+        let clsData = this.rules.classes[className];
+        let progression = clsData ? clsData[progressionKey] : null;
+        if (!progression) return;
+        let value = 0;
+        Object.entries(progression).forEach(([threshold, amount]) => {
+          if (level >= Number(threshold)) value = Math.max(value, Number(amount) || 0);
+        });
+        total += value;
+      });
+      return total;
+    },
+    getUncannyDodgeState(classLevels) {
+      let uncannySources = 0;
+      let improvedSources = 0;
+      let effectiveLevel = 0;
+      Object.entries(classLevels || {}).forEach(([className, level]) => {
+        let clsData = this.rules.classes[className];
+        let progression = clsData ? clsData.uncannyDodgeProgression : null;
+        if (!progression) return;
+        if (level >= (progression.uncanny || 999)) {
+          uncannySources++;
+          effectiveLevel += level;
+        }
+        if (level >= (progression.improved || 999)) {
+          improvedSources++;
+        }
+      });
+      return {
+        hasUncanny: uncannySources > 0,
+        hasImproved: improvedSources > 0 || uncannySources >= 2,
+        effectiveLevel: effectiveLevel
+      };
     },
     syncWizardChoices() {
       if (!this.character.wizardProhibitedSchools) this.$set(this.character, 'wizardProhibitedSchools', []);
@@ -1301,6 +1487,9 @@ new Vue({
     featureMapKey(name) {
       let lower = String(name || '').toLowerCase();
       if (lower === 'summon familiar' || lower === 'familiar') return 'familiar';
+      if (lower.startsWith('trap sense')) return 'trap sense';
+      if (lower.startsWith('sneak attack')) return 'sneak attack';
+      if (lower === 'uncanny dodge' || lower === 'improved uncanny dodge') return 'uncanny dodge';
       return lower;
     },
     parseCost(costStr) {
@@ -1549,6 +1738,8 @@ new Vue({
         this.syncKnownSpellClasses();
         this.syncKnownSpellArrays();
         this.syncRangerChoices();
+        this.syncWizardChoices();
+        this.syncRogueChoices();
       } catch (e) {
         console.error("Failed to load rules data:", e);
       }
