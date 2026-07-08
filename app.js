@@ -191,12 +191,13 @@ new Vue({
             clsData.features[currentLevel].forEach(f => {
               let name = typeof f === 'string' ? f : f.name;
               let replaces = typeof f === 'string' ? null : f.replaces;
+              let featureKey = this.featureMapKey(name);
 
               if (replaces) {
                 if (Array.isArray(replaces)) {
-                  replaces.forEach(r => featuresMap.delete(r));
+                  replaces.forEach(r => featuresMap.delete(this.featureMapKey(r)));
                 } else {
-                  featuresMap.delete(replaces);
+                  featuresMap.delete(this.featureMapKey(replaces));
                 }
               }
               let fObj = typeof f === 'string' ? {
@@ -208,7 +209,7 @@ new Vue({
                 isSpecialAttack: false,
                 isSpecialQuality: true
               } : f;
-              featuresMap.set(name, fObj);
+              featuresMap.set(featureKey, fObj);
             });
           }
         };
@@ -786,10 +787,17 @@ new Vue({
     },
     classSpells(className) {
       let result = {};
+      let clsData = this.rules.classes[className] || {};
+      let spellListNames = clsData.spellListAliases || [className];
       for (const [spellName, spellData] of Object.entries(this.rules.spells)) {
         if (!spellData.level) continue;
-        let regex = new RegExp(className + '\\s+(\\d+)', 'i');
-        let match = spellData.level.match(regex);
+        let match = null;
+        for (let spellListName of spellListNames) {
+          let escapedName = String(spellListName).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          let regex = new RegExp(escapedName + '\\s+(\\d+)', 'i');
+          match = spellData.level.match(regex);
+          if (match) break;
+        }
         if (match) {
           let lvl = parseInt(match[1]);
           if (!result[lvl]) result[lvl] = [];
@@ -910,6 +918,11 @@ new Vue({
         if (!aSelected && bSelected) return 1;
         return a.localeCompare(b);
       });
+    },
+    featureMapKey(name) {
+      let lower = String(name || '').toLowerCase();
+      if (lower === 'summon familiar' || lower === 'familiar') return 'familiar';
+      return lower;
     },
     parseCost(costStr) {
       if (!costStr || costStr === '—') return 0;
