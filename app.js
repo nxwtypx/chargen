@@ -800,7 +800,6 @@ new Vue({
     'character.wizardProhibitedSchools': {
       handler() {
         this.syncPreparedSpellArrays();
-        this.syncWizardChoices();
       },
       deep: true
     },
