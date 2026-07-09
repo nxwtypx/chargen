@@ -155,8 +155,8 @@ new Vue({
     },
     spentGold() {
       let total = 0;
-      this.character.weapons.forEach(w => {
-        total += this.parseCost(w.cost);
+      this.character.weapons.forEach(weapon => {
+        total += this.getWeaponCostValue(weapon);
       });
       this.character.armor.forEach(a => {
         total += this.parseCost(a.cost);
@@ -1503,6 +1503,33 @@ new Vue({
       if (unit.startsWith('cp')) return val / 100;
       return val;
     },
+    formatGoldCost(amount) {
+      let rounded = Math.round(amount * 100) / 100;
+      return `${Number.isInteger(rounded) ? rounded : rounded.toFixed(2)} gp`;
+    },
+    getWeaponMasterworkSurcharge(weapon) {
+      if (!weapon || !weapon.masterwork) return 0;
+      let rulesWeapon = this.rules.weapons.find(w => w.name === weapon.name);
+      return (weapon.isDouble || (rulesWeapon && rulesWeapon.isDouble)) ? 600 : 300;
+    },
+    getWeaponCostValue(weapon) {
+      if (!weapon) return 0;
+      return this.parseCost(weapon.cost) + this.getWeaponMasterworkSurcharge(weapon);
+    },
+    getWeaponCostLabel(weapon) {
+      if (!weapon) return '';
+      let surcharge = this.getWeaponMasterworkSurcharge(weapon);
+      if (!surcharge) return weapon.cost || '0 gp';
+      return this.formatGoldCost(this.getWeaponCostValue(weapon));
+    },
+    getWeaponDisplayName(weapon) {
+      if (!weapon) return '';
+      return `${weapon.masterwork ? 'Masterwork ' : ''}${weapon.name}`;
+    },
+    setWeaponMasterwork(index, checked) {
+      let weapon = this.character.weapons[index];
+      if (weapon) this.$set(weapon, 'masterwork', checked);
+    },
     getWeaponDamage(weapon, sizeOverride) {
       if (!weapon) return '-';
       let size = sizeOverride || weapon.size || this.characterSize;
@@ -1544,7 +1571,10 @@ new Vue({
         critical: weapon.critical,
         rangeIncrement: weapon.rangeIncrement,
         damageType: weapon.damageType,
-        classification: weapon.classification
+        classification: weapon.classification,
+        category: weapon.category,
+        isDouble: !!weapon.isDouble,
+        masterwork: false
       });
     },
     sellWeapon(index) {
@@ -2178,6 +2208,7 @@ new Vue({
           if (weapon) {
             let isRanged = weapon.rangeIncrement && weapon.rangeIncrement !== '—';
             let atkBonus = isRanged ? rangedAtk : meleeAtk;
+            if (weapon.masterwork) atkBonus += 1;
             
             let wNameLower = weapon.name.toLowerCase();
             let wCatLower = weapon.category ? weapon.category.toLowerCase() : '';
@@ -2205,12 +2236,13 @@ new Vue({
             let dmgStr = weapon.damage;
             if (dmgBonus !== 0) dmgStr += (dmgBonus > 0 ? '+' : '') + dmgBonus;
             
-            let wepAtk = `${weapon.name} ${atkBonus >= 0 ? '+' : ''}${atkBonus} ${isRanged ? 'ranged' : 'melee'} (${dmgStr}/${weapon.critical})`;
+            let weaponDisplayName = this.getWeaponDisplayName(weapon);
+            let wepAtk = `${weaponDisplayName} ${atkBonus >= 0 ? '+' : ''}${atkBonus} ${isRanged ? 'ranged' : 'melee'} (${dmgStr}/${weapon.critical})`;
             attackStrings.push(wepAtk);
             
             // Full attack with iteratives
             let iteratives = this.getIterativeAttacks(atkBonus, stats.bab);
-            let fullWepAtk = `${weapon.name} ${iteratives.join('/')} ${isRanged ? 'ranged' : 'melee'} (${dmgStr}/${weapon.critical})`;
+            let fullWepAtk = `${weaponDisplayName} ${iteratives.join('/')} ${isRanged ? 'ranged' : 'melee'} (${dmgStr}/${weapon.critical})`;
             
             let monkWeapons = ['unarmed strike', 'kama', 'nunchaku', 'quarterstaff', 'sai', 'shuriken', 'siangham'];
             let monkLevel = stats.classLevels['Monk'] || 0;
@@ -2442,12 +2474,14 @@ new Vue({
       this.character.equipped.weapons.forEach(ws => {
         if (ws.primary !== -1 && ws.primary !== '' && typeof ws.primary === 'string' && ws.primary.startsWith('w_')) {
           let w = this.character.weapons[parseInt(ws.primary.substring(2))];
-          if (w && !equipmentParts.includes(w.name)) equipmentParts.push(w.name);
+          let weaponName = this.getWeaponDisplayName(w);
+          if (w && !equipmentParts.includes(weaponName)) equipmentParts.push(weaponName);
         }
         if (ws.offhand !== -1 && ws.offhand !== '' && typeof ws.offhand === 'string') {
           if (ws.offhand.startsWith('w_')) {
             let w = this.character.weapons[parseInt(ws.offhand.substring(2))];
-            if (w && !equipmentParts.includes(w.name)) equipmentParts.push(w.name);
+            let weaponName = this.getWeaponDisplayName(w);
+            if (w && !equipmentParts.includes(weaponName)) equipmentParts.push(weaponName);
           } else if (ws.offhand.startsWith('a_')) {
             let a = this.character.armor[parseInt(ws.offhand.substring(2))];
             if (a && !equipmentParts.includes(a.name)) equipmentParts.push(a.name);

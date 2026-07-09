@@ -587,13 +587,18 @@
           <ul class="inventory-list">
             <li v-for="(weapon, index) in character.weapons" :key="'w_'+index" class="inventory-item">
               <div class="item-info">
-                <strong>{{ weapon.name }}</strong> ({{ weapon.size }})
+                <strong>{{ getWeaponDisplayName(weapon) }}</strong> ({{ weapon.size }})
                 <div class="item-stats">
                   Dmg: {{ getWeaponDamage(weapon) }} | Crit: {{ weapon.critical }}
                 </div>
+                <label style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; font-size: 0.85em; color: var(--text-primary); cursor: pointer;">
+                  <input type="checkbox" :checked="!!weapon.masterwork" @change="setWeaponMasterwork(index, $event.target.checked)">
+                  Masterwork
+                  <span style="color: var(--text-secondary);">(+{{ getWeaponMasterworkSurcharge({ masterwork: true, isDouble: weapon.isDouble, name: weapon.name }) }} gp)</span>
+                </label>
               </div>
               <div class="item-actions">
-                <span class="cost-label">{{ weapon.cost }}</span>
+                <span class="cost-label">{{ getWeaponCostLabel(weapon) }}</span>
                 <button class="sell-btn" @click="sellWeapon(index)">Sell</button>
               </div>
             </li>
@@ -708,7 +713,7 @@
                 <label style="display: block; font-size: 0.8em; color: var(--text-secondary); margin-bottom: 3px;">Primary Hand</label>
                 <select v-model="ws.primary" style="width: 100%;">
                   <option :value="-1">-- Empty --</option>
-                  <option v-for="(w, wIdx) in character.weapons" :key="'pw_'+wIdx" :value="'w_'+wIdx">{{ w.name }} ({{ w.size }})</option>
+                  <option v-for="(w, wIdx) in character.weapons" :key="'pw_'+wIdx" :value="'w_'+wIdx">{{ getWeaponDisplayName(w) }} ({{ w.size }})</option>
                 </select>
                 <div v-if="ws.primary !== -1 && canWieldTwoHanded(ws.primary)" style="margin-top: 5px; font-size: 0.85em;">
                   <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text-primary);">
@@ -721,7 +726,7 @@
                 <select v-model="ws.offhand" style="width: 100%;" :disabled="isTwoHandedWield(ws)">
                   <option :value="-1">-- Empty --</option>
                   <optgroup label="Weapons">
-                    <option v-for="(w, wIdx) in character.weapons" :key="'ow_'+wIdx" :value="'w_'+wIdx">{{ w.name }} ({{ w.size }})</option>
+                    <option v-for="(w, wIdx) in character.weapons" :key="'ow_'+wIdx" :value="'w_'+wIdx">{{ getWeaponDisplayName(w) }} ({{ w.size }})</option>
                   </optgroup>
                   <optgroup label="Shields">
                     <option v-for="(a, aIdx) in character.armor" v-if="a.category === 'Shield'" :key="'oa_'+aIdx" :value="'a_'+aIdx">{{ a.name }} ({{ a.size }})</option>
