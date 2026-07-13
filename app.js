@@ -522,6 +522,7 @@ new Vue({
       }
 
       let dexMod = this.getAbilityMod('dex');
+      let initiativeBonus = this.getFeatCount('Improved Initiative') > 0 ? 4 : 0;
       let cappedDex = Math.min(dexMod, maxDex);
       
       const sizeMods = { "Fine": 8, "Diminutive": 4, "Tiny": 2, "Small": 1, "Medium": 0, "Large": -1, "Huge": -2, "Gargantuan": -4, "Colossal": -8 };
@@ -544,6 +545,7 @@ new Vue({
           ref: Math.floor(baseSaves.ref) + this.getAbilityMod('dex') + divineGrace,
           will: Math.floor(baseSaves.will) + this.getAbilityMod('wis') + divineGrace
         },
+        initiative: dexMod + initiativeBonus,
         ac: {
           total: totalAc,
           touch: touchAc,
@@ -2267,8 +2269,10 @@ new Vue({
 
       let size = raceData ? raceData.size : 'Medium';
       let speed = raceData ? (raceData.speed || 30) : 30;
+      let initiative = stats.initiative || 0;
+      let initiativeString = `${initiative >= 0 ? '+' : ''}${initiative}`;
 
-      let output = `${this.character.name || 'Unnamed'}, ${raceName.toLowerCase()} gestalt ${classString}: CR ${cr}; ECL ${ecl}; ${size}-size ${this.creatureType}; HD ${hdString}; hp ${stats.hp}; Spd ${speed} ft.; `;
+      let output = `${this.character.name || 'Unnamed'}, ${raceName.toLowerCase()} gestalt ${classString}: CR ${cr}; ECL ${ecl}; ${size}-size ${this.creatureType}; HD ${hdString}; hp ${stats.hp}; Init ${initiativeString}; Spd ${speed} ft.; `;
 
       // AC computation
       let natArmor = raceData ? (raceData.naturalArmor || 0) : 0;
