@@ -1891,9 +1891,12 @@
     },
     "startingGold": 80,
     "bonusFeats": {
-      "Skill Focus (Heal)": [
+      "Skill Focus": [
         2
       ]
+    },
+    "bonusFeatParams": {
+      "Skill Focus": "Heal"
     },
     "weaponProficiencies": [
       "simple"

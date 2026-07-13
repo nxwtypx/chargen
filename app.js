@@ -1568,7 +1568,8 @@ new Vue({
         }
         this.getBonusFeatTags(i).forEach(tag => {
           if (this.rules.feats[tag] && !featStrings.some(f => f.startsWith(tag))) {
-            featStrings.push(tag);
+            let param = this.getFixedBonusFeatParam(i, tag);
+            featStrings.push(param ? `${tag} (${param})` : tag);
           }
         });
 
@@ -2003,16 +2004,51 @@ new Vue({
           if (lvl.bonusFeats[tag] === undefined) {
             this.$set(lvl.bonusFeats, tag, "");
           }
+          let fixedParam = this.getFixedBonusFeatParam(levelIndex, tag);
+          if (fixedParam) {
+            if (!lvl.bonusFeatsParams) this.$set(lvl, 'bonusFeatsParams', {});
+            if (lvl.bonusFeatsParams[tag] !== fixedParam) {
+              this.$set(lvl.bonusFeatsParams, tag, fixedParam);
+            }
+          }
         });
 
         Object.keys(lvl.bonusFeats).forEach(tag => {
           if (!tags.includes(tag)) {
             this.$delete(lvl.bonusFeats, tag);
+            if (lvl.bonusFeatsParams && lvl.bonusFeatsParams[tag] !== undefined) {
+              this.$delete(lvl.bonusFeatsParams, tag);
+            }
           }
         });
       }
 
       return tags;
+    },
+
+    getFixedBonusFeatParam(levelIndex, tag) {
+      let lvl = this.character.levels[levelIndex];
+      if (!lvl) return '';
+
+      let classesAtLevel = [lvl.trackA, lvl.trackB].filter(c => c);
+      for (let clsName of classesAtLevel) {
+        let clsData = this.rules.classes[clsName];
+        if (!clsData || !clsData.bonusFeats || !clsData.bonusFeatParams || !clsData.bonusFeatParams[tag]) continue;
+
+        let classLevel = 0;
+        for (let i = 0; i <= levelIndex; i++) {
+          let l = this.character.levels[i];
+          if (l.trackA === clsName || l.trackB === clsName) {
+            classLevel++;
+          }
+        }
+
+        if (clsData.bonusFeats[tag] && clsData.bonusFeats[tag].includes(classLevel)) {
+          return clsData.bonusFeatParams[tag];
+        }
+      }
+
+      return '';
     },
 
     formatBonusFeatName(tag) {
@@ -2051,7 +2087,8 @@ new Vue({
         }
         this.getBonusFeatTags(i).forEach(tag => {
           if (this.rules.feats[tag] && !feats.includes(tag)) {
-            feats.push(tag);
+            let param = this.getFixedBonusFeatParam(i, tag);
+            feats.push(param ? `${tag} (${param})` : tag);
           }
         });
       }
@@ -2174,6 +2211,7 @@ new Vue({
         if (l.bonusFeats) {
            Object.keys(l.bonusFeats).forEach(tag => {
               let fName = l.bonusFeats[tag];
+              if (!fName) return;
               let fStr = fName;
               if (l.bonusFeatsParams && l.bonusFeatsParams[tag]) fStr += ` (${l.bonusFeatsParams[tag]})`;
               arr.push(fStr);
@@ -2181,7 +2219,8 @@ new Vue({
         }
         this.getBonusFeatTags(i).forEach(tag => {
           if (this.rules.feats[tag] && !arr.some(f => f.startsWith(tag))) {
-            arr.push(tag);
+            let param = this.getFixedBonusFeatParam(i, tag);
+            arr.push(param ? `${tag} (${param})` : tag);
           }
         });
         return arr;
@@ -2459,6 +2498,10 @@ new Vue({
             let fData = this.rules.feats[featName];
             if (fData && fData.skillBonuses && fData.skillBonuses[sName]) {
               total += fData.skillBonuses[sName];
+            }
+            let skillFocusMatch = String(featName).match(/^Skill Focus \((.*?)\)$/i);
+            if (skillFocusMatch && skillFocusMatch[1] === sName) {
+              total += 3;
             }
           });
           

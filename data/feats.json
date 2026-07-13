@@ -177,14 +177,6 @@
       ]
     }
   },
-  "Skill Focus (Heal)": {
-    "name": "Skill Focus (Heal)",
-    "description": "You get a +3 bonus on all checks involving that skill.",
-    "prerequisites": {
-      "logic": "AND",
-      "conditions": []
-    }
-  },
   "Spellcasting Prodigy (Healer)": {
     "name": "Spellcasting Prodigy (Healer)",
     "description": "Treat your primary spellcasting ability score as 2 points higher for determining bonus spells and save DCs. This feat can only be taken at 1st level.",
