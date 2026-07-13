@@ -1483,6 +1483,104 @@ new Vue({
       });
       return count;
     },
+    getFeatParameterOptions(featName, levelIndex, bonusTag = null) {
+      let feat = this.rules.feats[featName];
+      if (!feat || !feat.requiresParameter) return [];
+
+      if (feat.requiresParameter === 'weapon') return this.weaponList;
+      if (feat.requiresParameter === 'skill') return this.skillList;
+      if (feat.requiresParameter === 'school') return this.schoolList;
+      if (feat.requiresParameter === 'exoticWeapon') {
+        let currentValue = '';
+        let level = this.character.levels[levelIndex];
+        if (level) {
+          currentValue = bonusTag
+            ? (level.bonusFeatsParams && level.bonusFeatsParams[bonusTag]) || ''
+            : level.featParam || '';
+        }
+        return this.getAvailableExoticWeaponProficiencyOptions(levelIndex, currentValue, bonusTag);
+      }
+
+      return [];
+    },
+    formatFeatParameterLabel(parameterType) {
+      if (parameterType === 'exoticWeapon') return 'exotic weapon';
+      return parameterType || 'option';
+    },
+    getAvailableExoticWeaponProficiencyOptions(levelIndex, currentValue = '', bonusTag = null) {
+      if (!this.rules.weapons || !Array.isArray(this.rules.weapons)) return [];
+
+      let proficiencies = this.getWeaponProficienciesUpToLevel(levelIndex, {
+        levelIndex,
+        bonusTag
+      });
+
+      return this.rules.weapons
+        .filter(w => {
+          if (!w || !w.name || w.category !== 'Exotic') return false;
+          if (currentValue && w.name === currentValue) return true;
+          let name = w.name.toLowerCase();
+          let category = w.category ? w.category.toLowerCase() : '';
+          return !proficiencies.has(name) && !proficiencies.has(category);
+        })
+        .map(w => w.name)
+        .sort();
+    },
+    getWeaponProficienciesUpToLevel(levelIndex, exclude = {}) {
+      let proficiencies = new Set();
+      let raceData = this.rules.races[this.character.race];
+
+      for (let i = 0; i <= levelIndex; i++) {
+        let lvl = this.character.levels[i];
+        if (!lvl) continue;
+
+        let clsA = this.rules.classes[lvl.trackA];
+        let clsB = this.rules.classes[lvl.trackB];
+        if (clsA && clsA.weaponProficiencies) clsA.weaponProficiencies.forEach(p => proficiencies.add(p.toLowerCase()));
+        if (clsB && clsB.weaponProficiencies) clsB.weaponProficiencies.forEach(p => proficiencies.add(p.toLowerCase()));
+      }
+
+      if (raceData && raceData.weaponProficiencies) {
+        raceData.weaponProficiencies.forEach(p => proficiencies.add(p.toLowerCase()));
+      }
+      if (this.character.race === 'Elf') {
+        ['longsword', 'rapier', 'longbow', 'composite longbow', 'shortbow', 'composite shortbow'].forEach(p => proficiencies.add(p));
+      }
+
+      for (let i = 0; i <= levelIndex; i++) {
+        let lvl = this.character.levels[i];
+        if (!lvl) continue;
+
+        let featStrings = [];
+        if (!(exclude.levelIndex === i && !exclude.bonusTag) && lvl.feat) {
+          featStrings.push(lvl.featParam ? `${lvl.feat} (${lvl.featParam})` : lvl.feat);
+        }
+        if (lvl.bonusFeats) {
+          Object.keys(lvl.bonusFeats).forEach(tag => {
+            if (exclude.levelIndex === i && exclude.bonusTag === tag) return;
+            let fName = lvl.bonusFeats[tag];
+            if (!fName) return;
+            let param = lvl.bonusFeatsParams && lvl.bonusFeatsParams[tag];
+            featStrings.push(param ? `${fName} (${param})` : fName);
+          });
+        }
+        this.getBonusFeatTags(i).forEach(tag => {
+          if (this.rules.feats[tag] && !featStrings.some(f => f.startsWith(tag))) {
+            featStrings.push(tag);
+          }
+        });
+
+        featStrings.forEach(feat => {
+          let fLower = feat.toLowerCase();
+          if (fLower === 'simple weapon proficiency') proficiencies.add('simple');
+          if (fLower === 'martial weapon proficiency') proficiencies.add('martial');
+          let m = fLower.match(/(martial|exotic) weapon proficiency \((.*?)\)/i);
+          if (m) proficiencies.add(m[2].trim());
+        });
+      }
+
+      return proficiencies;
+    },
     featureMapKey(name) {
       let lower = String(name || '').toLowerCase();
       if (lower === 'summon familiar' || lower === 'familiar') return 'familiar';

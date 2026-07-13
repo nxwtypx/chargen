@@ -139,10 +139,8 @@
                   </select>
                   <div v-if="level.feat && rules.feats[level.feat] && rules.feats[level.feat].requiresParameter" style="margin-top: 2px;">
                     <select v-model="level.featParam" style="width: 95%; border-color: #666; margin-left: 5%;">
-                      <option value="">-- Select {{ rules.feats[level.feat].requiresParameter }} --</option>
-                      <option v-if="rules.feats[level.feat].requiresParameter === 'weapon'" v-for="w in weaponList" :key="w" :value="w">{{ w }}</option>
-                      <option v-if="rules.feats[level.feat].requiresParameter === 'skill'" v-for="s in skillList" :key="s" :value="s">{{ s }}</option>
-                      <option v-if="rules.feats[level.feat].requiresParameter === 'school'" v-for="s in schoolList" :key="s" :value="s">{{ s }}</option>
+                      <option value="">-- Select {{ formatFeatParameterLabel(rules.feats[level.feat].requiresParameter) }} --</option>
+                      <option v-for="option in getFeatParameterOptions(level.feat, index)" :key="option" :value="option">{{ option }}</option>
                     </select>
                   </div>
                   <div v-if="level.feat && !checkPrerequisites(level.feat, index)" class="feat-error">
@@ -165,10 +163,8 @@
                     </select>
                     <div v-if="level.bonusFeats[tag] && rules.feats[level.bonusFeats[tag]] && rules.feats[level.bonusFeats[tag]].requiresParameter" style="margin-top: 2px;">
                       <select v-model="level.bonusFeatsParams[tag]" style="width: 95%; border-color: #666; margin-left: 5%;">
-                        <option value="">-- Select {{ rules.feats[level.bonusFeats[tag]].requiresParameter }} --</option>
-                        <option v-if="rules.feats[level.bonusFeats[tag]].requiresParameter === 'weapon'" v-for="w in weaponList" :key="w" :value="w">{{ w }}</option>
-                        <option v-if="rules.feats[level.bonusFeats[tag]].requiresParameter === 'skill'" v-for="s in skillList" :key="s" :value="s">{{ s }}</option>
-                        <option v-if="rules.feats[level.bonusFeats[tag]].requiresParameter === 'school'" v-for="s in schoolList" :key="s" :value="s">{{ s }}</option>
+                        <option value="">-- Select {{ formatFeatParameterLabel(rules.feats[level.bonusFeats[tag]].requiresParameter) }} --</option>
+                        <option v-for="option in getFeatParameterOptions(level.bonusFeats[tag], index, tag)" :key="option" :value="option">{{ option }}</option>
                       </select>
                     </div>
                     <div v-if="level.bonusFeats[tag] && !tag.startsWith('monkBonusFeat') && !checkPrerequisites(level.bonusFeats[tag], index)" class="feat-error">
