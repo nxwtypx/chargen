@@ -202,6 +202,13 @@ new Vue({
               let name = typeof f === 'string' ? f : f.name;
               let replaces = typeof f === 'string' ? null : f.replaces;
               let featureKey = this.featureMapKey(name);
+              if (
+                (featureKey === 'trap sense' && clsData.trapSenseProgression) ||
+                (featureKey === 'sneak attack' && clsData.sneakAttackProgression) ||
+                (featureKey === 'uncanny dodge' && clsData.uncannyDodgeProgression)
+              ) {
+                return;
+              }
 
               if (replaces) {
                 if (Array.isArray(replaces)) {

@@ -199,7 +199,7 @@
             <ul style="margin: 0; padding-left: 20px;">
               <!-- Race Features -->
               <template v-if="rules.races[character.race] && rules.races[character.race].features">
-                <li v-for="feature in rules.races[character.race].features" :key="typeof feature === 'string' ? 'rf_'+feature : 'rf_'+feature.name" style="margin-bottom: 5px;">
+                <li v-for="(feature, idx) in rules.races[character.race].features" :key="typeof feature === 'string' ? 'rf_'+idx+'_'+feature : 'rf_'+idx+'_'+feature.name" style="margin-bottom: 5px;">
                   <template v-if="typeof feature === 'string'">
                     <span style="color: #61afef; font-weight: bold;">{{ feature }}</span>
                   </template>
@@ -212,7 +212,7 @@
               </template>
               
               <!-- Class Features -->
-              <li v-for="feature in calculatedStats.features" :key="typeof feature === 'string' ? 'cf_'+feature : 'cf_'+feature.name" style="margin-bottom: 5px;">
+              <li v-for="(feature, idx) in calculatedStats.features" :key="typeof feature === 'string' ? 'cf_'+idx+'_'+feature : 'cf_'+idx+'_'+feature.name" style="margin-bottom: 5px;">
                 <template v-if="typeof feature === 'string'">
                   <strong>{{ feature }}</strong>
                 </template>
