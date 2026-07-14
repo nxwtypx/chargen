@@ -1729,6 +1729,7 @@ new Vue({
       if (!pool) return 0;
 
       let isClass = this.isClassSkill(alloc.skill, alloc.pool);
+      let hasClassSkillAccess = this.skillPools.some(p => this.isClassSkill(alloc.skill, p.name));
       
       let key = alloc.skill;
       if (this.rules.skills && this.rules.skills[alloc.skill] && this.rules.skills[alloc.skill].hasSpecialization) {
@@ -1747,7 +1748,7 @@ new Vue({
         if (aKey === key) {
           let aPool = this.skillPools.find(p => p.name === a.pool);
           if (aPool) {
-            let aIsClass = aPool.classSkills.includes(a.skill);
+            let aIsClass = this.isClassSkill(a.skill, a.pool);
             let aPts = Number(a.points) || 0;
             otherRanks += aIsClass ? aPts : aPts / 2;
           }
@@ -1757,7 +1758,7 @@ new Vue({
         }
       });
       
-      let maxRank = this.character.levels.length + 3;
+      let maxRank = hasClassSkillAccess ? this.character.levels.length + 3 : (this.character.levels.length + 3) / 2;
       let ranksNeeded = Math.max(0, maxRank - otherRanks);
       let ptsNeeded = isClass ? ranksNeeded : ranksNeeded * 2;
       
