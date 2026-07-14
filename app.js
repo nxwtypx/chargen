@@ -2340,7 +2340,7 @@ new Vue({
       let attackStrings = [];
       let fullAttackStrings = [];
 
-      let firstWeaponSet = this.character.equipped.weapons[0];
+      this.character.equipped.weapons.forEach(firstWeaponSet => {
       if (firstWeaponSet && firstWeaponSet.primary !== -1 && firstWeaponSet.primary !== '') {
         // Find weapon
         let primVal = firstWeaponSet.primary;
@@ -2401,6 +2401,7 @@ new Vue({
           }
         }
       }
+      });
 
       if (attackStrings.length === 0) {
         let unarmedDmg = this.getWeaponDamage({name: 'Unarmed strike', size: this.characterSize});
